@@ -1,7 +1,6 @@
-'use client';
+"use client";
 
 import { Settings, Sun, Moon, Compass, Globe2 } from "lucide-react";
-import { UserProfile } from "./UserProfile";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/app/contexts/ThemeContext";
 import { useLanguage } from "@/app/contexts/LanguageContext";
@@ -40,10 +39,7 @@ export function Header() {
         <div className="flex items-center gap-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                className="flex items-center gap-2 px-3"
-              >
+              <Button variant="ghost" className="flex items-center gap-2 px-3">
                 <Globe2 className="h-5 w-5 text-muted-foreground" />
                 <span className="text-sm font-medium">{language}</span>
               </Button>
@@ -53,7 +49,9 @@ export function Header() {
                 <DropdownMenuItem
                   key={lang}
                   onClick={() => setLanguage(lang)}
-                  className={`${language === lang ? "bg-accent" : ""} cursor-pointer`}
+                  className={`${
+                    language === lang ? "bg-accent" : ""
+                  } cursor-pointer`}
                 >
                   {lang}
                 </DropdownMenuItem>
@@ -66,15 +64,14 @@ export function Header() {
             className="h-10 w-10 rounded-full"
             onClick={toggleTheme}
           >
-            {theme === 'dark' ? (
+            {theme === "dark" ? (
               <Moon className="h-5 w-5 text-muted-foreground" />
             ) : (
               <Sun className="h-5 w-5 text-muted-foreground" />
             )}
           </Button>
-          <UserProfile />
         </div>
       </div>
     </header>
   );
-} 
+}
