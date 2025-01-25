@@ -1,6 +1,6 @@
 "use client";
 
-import { Settings, Sun, Moon, Compass, Globe2 } from "lucide-react";
+import { Settings, Sun, Moon, Compass, Globe2, Languages } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/app/contexts/ThemeContext";
 import { useLanguage } from "@/app/contexts/LanguageContext";
@@ -43,7 +43,7 @@ export function Header() {
                 variant="ghost"
                 className="flex items-center gap-2 px-3 text-gray-300 hover:text-gray-100"
               >
-                <Globe2 className="h-5 w-5" />
+                <Languages className="h-5 w-5" />
                 <span className="text-sm font-medium">{language}</span>
               </Button>
             </DropdownMenuTrigger>
