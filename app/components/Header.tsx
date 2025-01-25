@@ -1,9 +1,10 @@
 "use client";
 
-import { Settings, Sun, Moon, Compass, Globe2, Languages } from "lucide-react";
+import { Settings, Sun, Moon, Compass, Languages } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/app/contexts/ThemeContext";
 import { useLanguage } from "@/app/contexts/LanguageContext";
+import Image from "next/image";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,9 +31,15 @@ export function Header() {
   return (
     <header className="fixed top-0 right-0 left-0 z-50 h-16 bg-black/40 backdrop-blur-sm border-b border-gray-800">
       <div className="h-full w-full max-w-screen-2xl mx-auto px-4 flex items-center justify-between gap-2">
-        <div className="flex items-center gap-2">
-          <div className="text-xl font-semibold flex items-center gap-2 text-gray-100">
-            <Globe2 className="h-6 w-6" />
+        <div className="flex items-center gap-3">
+          <div className="text-xl font-semibold flex items-center gap-3 text-gray-100">
+            <Image
+              src="/earth-logo.png"
+              alt="XpatAI Logo"
+              width={28}
+              height={28}
+              className="rounded-full"
+            />
             XpatAI
           </div>
         </div>
