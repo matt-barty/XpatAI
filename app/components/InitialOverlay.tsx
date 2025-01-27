@@ -43,7 +43,7 @@ export function InitialOverlay() {
             className="text-center text-white p-8 rounded-lg max-w-md"
           >
             <Compass className="h-16 w-16 mx-auto mb-6" />
-            <h2 className="text-2xl font-semibold mb-4">Welcome to LlamaXpat</h2>
+            <h2 className="text-2xl font-semibold mb-4">Welcome to XpatAI</h2>
             <p className="text-xl opacity-90">
               Click on any country to begin your journey
             </p>
