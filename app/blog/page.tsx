@@ -126,7 +126,10 @@ export default function BlogPage() {
                     <div className="p-6">
                       <h3 className="font-bold mb-2">
                         <Link
-                          href="/blog/post-slug"
+                          href={`/blog/${post.title
+                            .toLowerCase()
+                            .replace(/[^a-z0-9]+/g, "-")
+                            .replace(/^-+|-+$/g, "")}`}
                           className="hover:text-sky-600"
                         >
                           {post.title}
