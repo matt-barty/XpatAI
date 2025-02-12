@@ -448,333 +448,359 @@ const CountryCard = ({ country = "Japan", onClose }: CountryCardProps) => {
             </ScrollArea>
           </TabsContent>
 
-          <TabsContent value="immigration" className="h-full">
-            <div className="space-y-6 px-4 py-2">
-              {isTabLoading || isLoading ? (
-                <div className="flex items-center justify-center py-8">
-                  <div className="animate-spin rounded-full h-8 w-8 border-2 border-blue-400" />
-                </div>
-              ) : legalData ? (
-                <>
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <h3 className="font-semibold">Visa Requirements</h3>
-                      <p className="text-sm text-gray-600">
-                        {legalData.visaRequirements ||
-                          "Information not available"}
-                      </p>
-                    </div>
+          <TabsContent
+            value="immigration"
+            className="h-full data-[state=active]:flex flex-col"
+          >
+            <ScrollArea className="flex-1">
+              <div className="px-4 py-2">
+                {isTabLoading || isLoading ? (
+                  <div className="flex items-center justify-center py-8">
+                    <div className="animate-spin rounded-full h-8 w-8 border-2 border-blue-400" />
                   </div>
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <h3 className="font-semibold">Path to Residency</h3>
-                      <p className="text-sm text-gray-600">
-                        {legalData.pathToResidency ||
-                          "Information not available"}
-                      </p>
+                ) : legalData ? (
+                  <>
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <h3 className="font-semibold">Visa Requirements</h3>
+                        <p className="text-sm text-gray-600">
+                          {legalData.visaRequirements ||
+                            "Information not available"}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <h3 className="font-semibold">Required Documents</h3>
-                      <ul className="text-sm text-gray-600 list-disc pl-4 space-y-1">
-                        {legalData.requiredDocuments?.map(
-                          (doc: string, index: number) => (
-                            <li key={index}>{doc}</li>
-                          )
-                        ) || <li>Information not available</li>}
-                      </ul>
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <h3 className="font-semibold">Path to Residency</h3>
+                        <p className="text-sm text-gray-600">
+                          {legalData.pathToResidency ||
+                            "Information not available"}
+                        </p>
+                      </div>
                     </div>
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <h3 className="font-semibold">Required Documents</h3>
+                        <ul className="text-sm text-gray-600 list-disc pl-4 space-y-1">
+                          {legalData.requiredDocuments?.map(
+                            (doc: string, index: number) => (
+                              <li key={index}>{doc}</li>
+                            )
+                          ) || <li>Information not available</li>}
+                        </ul>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <div className="flex flex-col items-center justify-center py-8 space-y-4">
+                    <p className="text-center text-gray-500">
+                      Failed to load legal information
+                    </p>
+                    <button
+                      onClick={handleRefresh}
+                      className="px-4 py-2 text-sm text-blue-600 hover:text-blue-700 transition-colors flex items-center gap-2"
+                    >
+                      <RefreshCw className="h-4 w-4" />
+                      Try again
+                    </button>
                   </div>
-                </>
-              ) : (
-                <div className="flex flex-col items-center justify-center py-8 space-y-4">
-                  <p className="text-center text-gray-500">
-                    Failed to load legal information
-                  </p>
-                  <button
-                    onClick={handleRefresh}
-                    className="px-4 py-2 text-sm text-blue-600 hover:text-blue-700 transition-colors flex items-center gap-2"
-                  >
-                    <RefreshCw className="h-4 w-4" />
-                    Try again
-                  </button>
-                </div>
-              )}
-            </div>
+                )}
+              </div>
+            </ScrollArea>
           </TabsContent>
 
-          <TabsContent value="quality" className="h-full">
-            <div className="space-y-6 px-4 py-2">
-              {isTabLoading || isLoading ? (
-                <div className="flex items-center justify-center py-8">
-                  <div className="animate-spin rounded-full h-8 w-8 border-2 border-blue-400" />
-                </div>
-              ) : qualityData && qualityData.healthcare ? (
-                <>
-                  <div className="space-y-4">
-                    <h3 className="font-semibold text-lg">Healthcare</h3>
-                    <div className="grid gap-4">
-                      <div className="space-y-2">
-                        <h4 className="font-medium">System</h4>
-                        <p className="text-sm text-gray-600">
-                          {qualityData.healthcare.system ||
-                            "Information not available"}
-                        </p>
-                      </div>
-                      <div className="space-y-2">
-                        <h4 className="font-medium">Quality</h4>
-                        <p className="text-sm text-gray-600">
-                          {qualityData.healthcare.quality ||
-                            "Information not available"}
-                        </p>
-                      </div>
-                      <div className="space-y-2">
-                        <h4 className="font-medium">Cost</h4>
-                        <p className="text-sm text-gray-600">
-                          {qualityData.healthcare.cost ||
-                            "Information not available"}
-                        </p>
-                      </div>
-                    </div>
+          <TabsContent
+            value="quality"
+            className="h-full data-[state=active]:flex flex-col"
+          >
+            <ScrollArea className="flex-1">
+              <div className="px-4 py-2">
+                {isTabLoading || isLoading ? (
+                  <div className="flex items-center justify-center py-8">
+                    <div className="animate-spin rounded-full h-8 w-8 border-2 border-blue-400" />
                   </div>
-
-                  {qualityData.safety && (
+                ) : qualityData && qualityData.healthcare ? (
+                  <>
                     <div className="space-y-4">
-                      <h3 className="font-semibold text-lg">Safety</h3>
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2">
-                          <h4 className="font-medium">Safety Index</h4>
-                          {qualityData.safety.index && (
-                            <span className="text-sm bg-green-100 text-green-800 px-2 py-0.5 rounded-full">
-                              {qualityData.safety.index}
-                            </span>
-                          )}
-                        </div>
-                        <p className="text-sm text-gray-600">
-                          {qualityData.safety.details ||
-                            "Information not available"}
-                        </p>
-                      </div>
-                    </div>
-                  )}
-
-                  {qualityData.environment && (
-                    <div className="space-y-4">
-                      <h3 className="font-semibold text-lg">Environment</h3>
+                      <h3 className="font-semibold text-lg">Healthcare</h3>
                       <div className="grid gap-4">
                         <div className="space-y-2">
-                          <h4 className="font-medium">Air Quality</h4>
+                          <h4 className="font-medium">System</h4>
                           <p className="text-sm text-gray-600">
-                            {qualityData.environment.airQuality ||
+                            {qualityData.healthcare.system ||
                               "Information not available"}
                           </p>
                         </div>
                         <div className="space-y-2">
-                          <h4 className="font-medium">Climate</h4>
+                          <h4 className="font-medium">Quality</h4>
                           <p className="text-sm text-gray-600">
-                            {qualityData.environment.climate ||
+                            {qualityData.healthcare.quality ||
                               "Information not available"}
                           </p>
                         </div>
                         <div className="space-y-2">
-                          <h4 className="font-medium">Sustainability</h4>
+                          <h4 className="font-medium">Cost</h4>
                           <p className="text-sm text-gray-600">
-                            {qualityData.environment.sustainability ||
+                            {qualityData.healthcare.cost ||
                               "Information not available"}
                           </p>
                         </div>
                       </div>
                     </div>
-                  )}
-                </>
-              ) : (
-                <div className="flex flex-col items-center justify-center py-8 space-y-4">
-                  <p className="text-center text-gray-500">
-                    Failed to load quality of life information
-                  </p>
-                  <button
-                    onClick={handleRefresh}
-                    className="px-4 py-2 text-sm text-blue-600 hover:text-blue-700 transition-colors flex items-center gap-2"
-                  >
-                    <RefreshCw className="h-4 w-4" />
-                    Try again
-                  </button>
-                </div>
-              )}
-            </div>
-          </TabsContent>
 
-          <TabsContent value="work" className="h-full">
-            <div className="space-y-6 px-4 py-2">
-              {isTabLoading || isLoading ? (
-                <div className="flex items-center justify-center py-8">
-                  <div className="animate-spin rounded-full h-8 w-8 border-2 border-blue-400" />
-                </div>
-              ) : workData && workData.jobMarket ? (
-                <>
-                  <div className="space-y-4">
-                    <h3 className="font-semibold text-lg">Job Market</h3>
-                    <div className="space-y-2">
-                      <p className="text-sm text-gray-600">
-                        {workData.jobMarket.overview ||
-                          "Information not available"}
-                      </p>
-                      {workData.jobMarket.inDemandSectors &&
-                        workData.jobMarket.inDemandSectors.length > 0 && (
-                          <div className="mt-4">
-                            <h4 className="font-medium">In-Demand Sectors</h4>
-                            <div className="flex flex-wrap gap-2 mt-2">
-                              {workData.jobMarket.inDemandSectors.map(
-                                (sector, index) => (
-                                  <span
-                                    key={index}
-                                    className="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded-full"
-                                  >
-                                    {sector}
-                                  </span>
-                                )
-                              )}
-                            </div>
+                    {qualityData.safety && (
+                      <div className="space-y-4">
+                        <h3 className="font-semibold text-lg">Safety</h3>
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-2">
+                            <h4 className="font-medium">Safety Index</h4>
+                            {qualityData.safety.index && (
+                              <span className="text-sm bg-green-100 text-green-800 px-2 py-0.5 rounded-full">
+                                {qualityData.safety.index}
+                              </span>
+                            )}
                           </div>
-                        )}
-                    </div>
-                  </div>
-
-                  {workData.foreignWorkers && (
-                    <div className="space-y-4">
-                      <h3 className="font-semibold text-lg">Foreign Workers</h3>
-                      <div className="space-y-2">
-                        <p className="text-sm text-gray-600">
-                          {workData.foreignWorkers.opportunities ||
-                            "Information not available"}
-                        </p>
-                        <div className="mt-4">
-                          <h4 className="font-medium">Work Permits</h4>
-                          <p className="text-sm text-gray-600 mt-2">
-                            {workData.foreignWorkers.workPermits ||
+                          <p className="text-sm text-gray-600">
+                            {qualityData.safety.details ||
                               "Information not available"}
                           </p>
                         </div>
-                        {workData.foreignWorkers.challenges &&
-                          workData.foreignWorkers.challenges.length > 0 && (
+                      </div>
+                    )}
+
+                    {qualityData.environment && (
+                      <div className="space-y-4">
+                        <h3 className="font-semibold text-lg">Environment</h3>
+                        <div className="grid gap-4">
+                          <div className="space-y-2">
+                            <h4 className="font-medium">Air Quality</h4>
+                            <p className="text-sm text-gray-600">
+                              {qualityData.environment.airQuality ||
+                                "Information not available"}
+                            </p>
+                          </div>
+                          <div className="space-y-2">
+                            <h4 className="font-medium">Climate</h4>
+                            <p className="text-sm text-gray-600">
+                              {qualityData.environment.climate ||
+                                "Information not available"}
+                            </p>
+                          </div>
+                          <div className="space-y-2">
+                            <h4 className="font-medium">Sustainability</h4>
+                            <p className="text-sm text-gray-600">
+                              {qualityData.environment.sustainability ||
+                                "Information not available"}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div className="flex flex-col items-center justify-center py-8 space-y-4">
+                    <p className="text-center text-gray-500">
+                      Failed to load quality of life information
+                    </p>
+                    <button
+                      onClick={handleRefresh}
+                      className="px-4 py-2 text-sm text-blue-600 hover:text-blue-700 transition-colors flex items-center gap-2"
+                    >
+                      <RefreshCw className="h-4 w-4" />
+                      Try again
+                    </button>
+                  </div>
+                )}
+              </div>
+            </ScrollArea>
+          </TabsContent>
+
+          <TabsContent
+            value="work"
+            className="h-full data-[state=active]:flex flex-col"
+          >
+            <ScrollArea className="flex-1">
+              <div className="px-4 py-2">
+                {isTabLoading || isLoading ? (
+                  <div className="flex items-center justify-center py-8">
+                    <div className="animate-spin rounded-full h-8 w-8 border-2 border-blue-400" />
+                  </div>
+                ) : workData && workData.jobMarket ? (
+                  <>
+                    <div className="space-y-4">
+                      <h3 className="font-semibold text-lg">Job Market</h3>
+                      <div className="space-y-2">
+                        <p className="text-sm text-gray-600">
+                          {workData.jobMarket.overview ||
+                            "Information not available"}
+                        </p>
+                        {workData.jobMarket.inDemandSectors &&
+                          workData.jobMarket.inDemandSectors.length > 0 && (
                             <div className="mt-4">
-                              <h4 className="font-medium">Common Challenges</h4>
-                              <ul className="text-sm text-gray-600 list-disc pl-4 mt-2 space-y-1">
-                                {workData.foreignWorkers.challenges.map(
-                                  (challenge, index) => (
-                                    <li key={index}>{challenge}</li>
+                              <h4 className="font-medium">In-Demand Sectors</h4>
+                              <div className="flex flex-wrap gap-2 mt-2">
+                                {workData.jobMarket.inDemandSectors.map(
+                                  (sector, index) => (
+                                    <span
+                                      key={index}
+                                      className="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded-full"
+                                    >
+                                      {sector}
+                                    </span>
                                   )
                                 )}
-                              </ul>
+                              </div>
                             </div>
                           )}
                       </div>
                     </div>
-                  )}
-                </>
-              ) : (
-                <div className="flex flex-col items-center justify-center py-8 space-y-4">
-                  <p className="text-center text-gray-500">
-                    Failed to load work information
-                  </p>
-                  <button
-                    onClick={handleRefresh}
-                    className="px-4 py-2 text-sm text-blue-600 hover:text-blue-700 transition-colors flex items-center gap-2"
-                  >
-                    <RefreshCw className="h-4 w-4" />
-                    Try again
-                  </button>
-                </div>
-              )}
-            </div>
-          </TabsContent>
 
-          <TabsContent value="culture" className="h-full">
-            <div className="space-y-6 px-4 py-2">
-              {isTabLoading || isLoading ? (
-                <div className="flex items-center justify-center py-8">
-                  <div className="animate-spin rounded-full h-8 w-8 border-2 border-blue-400" />
-                </div>
-              ) : cultureData && cultureData.society ? (
-                <>
-                  <div className="space-y-4">
-                    <h3 className="font-semibold text-lg">Society & Customs</h3>
-                    <div className="grid gap-4">
-                      {cultureData.society.values &&
-                        cultureData.society.values.length > 0 && (
-                          <div className="space-y-2">
-                            <h4 className="font-medium">Core Values</h4>
-                            <ul className="text-sm text-gray-600 list-disc pl-4 space-y-1">
-                              {cultureData.society.values.map(
-                                (value: string, index: number) => (
-                                  <li key={index}>{value}</li>
-                                )
-                              )}
-                            </ul>
-                          </div>
-                        )}
-                      {cultureData.society.customs &&
-                        cultureData.society.customs.length > 0 && (
-                          <div className="space-y-2">
-                            <h4 className="font-medium">Important Customs</h4>
-                            <ul className="text-sm text-gray-600 list-disc pl-4 space-y-1">
-                              {cultureData.society.customs.map(
-                                (custom: string, index: number) => (
-                                  <li key={index}>{custom}</li>
-                                )
-                              )}
-                            </ul>
-                          </div>
-                        )}
-                    </div>
-                  </div>
-
-                  {cultureData.language && (
-                    <div className="space-y-4">
-                      <h3 className="font-semibold text-lg">Language</h3>
-                      <div className="grid gap-4">
-                        {cultureData.language.official &&
-                          cultureData.language.official.length > 0 && (
-                            <div className="space-y-2">
-                              <h4 className="font-medium">
-                                Official Languages
-                              </h4>
-                              <ul className="text-sm text-gray-600 list-disc pl-4 space-y-1">
-                                {cultureData.language.official.map(
-                                  (lang: string, index: number) => (
-                                    <li key={index}>{lang}</li>
-                                  )
-                                )}
-                              </ul>
-                            </div>
-                          )}
+                    {workData.foreignWorkers && (
+                      <div className="space-y-4">
+                        <h3 className="font-semibold text-lg">
+                          Foreign Workers
+                        </h3>
                         <div className="space-y-2">
-                          <h4 className="font-medium">Business English</h4>
                           <p className="text-sm text-gray-600">
-                            {cultureData.language.businessEnglish ||
+                            {workData.foreignWorkers.opportunities ||
                               "Information not available"}
                           </p>
+                          <div className="mt-4">
+                            <h4 className="font-medium">Work Permits</h4>
+                            <p className="text-sm text-gray-600 mt-2">
+                              {workData.foreignWorkers.workPermits ||
+                                "Information not available"}
+                            </p>
+                          </div>
+                          {workData.foreignWorkers.challenges &&
+                            workData.foreignWorkers.challenges.length > 0 && (
+                              <div className="mt-4">
+                                <h4 className="font-medium">
+                                  Common Challenges
+                                </h4>
+                                <ul className="text-sm text-gray-600 list-disc pl-4 mt-2 space-y-1">
+                                  {workData.foreignWorkers.challenges.map(
+                                    (challenge, index) => (
+                                      <li key={index}>{challenge}</li>
+                                    )
+                                  )}
+                                </ul>
+                              </div>
+                            )}
                         </div>
                       </div>
+                    )}
+                  </>
+                ) : (
+                  <div className="flex flex-col items-center justify-center py-8 space-y-4">
+                    <p className="text-center text-gray-500">
+                      Failed to load work information
+                    </p>
+                    <button
+                      onClick={handleRefresh}
+                      className="px-4 py-2 text-sm text-blue-600 hover:text-blue-700 transition-colors flex items-center gap-2"
+                    >
+                      <RefreshCw className="h-4 w-4" />
+                      Try again
+                    </button>
+                  </div>
+                )}
+              </div>
+            </ScrollArea>
+          </TabsContent>
+
+          <TabsContent
+            value="culture"
+            className="h-full data-[state=active]:flex flex-col"
+          >
+            <ScrollArea className="flex-1">
+              <div className="px-4 py-2">
+                {isTabLoading || isLoading ? (
+                  <div className="flex items-center justify-center py-8">
+                    <div className="animate-spin rounded-full h-8 w-8 border-2 border-blue-400" />
+                  </div>
+                ) : cultureData && cultureData.society ? (
+                  <>
+                    <div className="space-y-4">
+                      <h3 className="font-semibold text-lg">
+                        Society & Customs
+                      </h3>
+                      <div className="grid gap-4">
+                        {cultureData.society.values &&
+                          cultureData.society.values.length > 0 && (
+                            <div className="space-y-2">
+                              <h4 className="font-medium">Core Values</h4>
+                              <ul className="text-sm text-gray-600 list-disc pl-4 space-y-1">
+                                {cultureData.society.values.map(
+                                  (value: string, index: number) => (
+                                    <li key={index}>{value}</li>
+                                  )
+                                )}
+                              </ul>
+                            </div>
+                          )}
+                        {cultureData.society.customs &&
+                          cultureData.society.customs.length > 0 && (
+                            <div className="space-y-2">
+                              <h4 className="font-medium">Important Customs</h4>
+                              <ul className="text-sm text-gray-600 list-disc pl-4 space-y-1">
+                                {cultureData.society.customs.map(
+                                  (custom: string, index: number) => (
+                                    <li key={index}>{custom}</li>
+                                  )
+                                )}
+                              </ul>
+                            </div>
+                          )}
+                      </div>
                     </div>
-                  )}
-                </>
-              ) : (
-                <div className="flex flex-col items-center justify-center py-8 space-y-4">
-                  <p className="text-center text-gray-500">
-                    Failed to load cultural information
-                  </p>
-                  <button
-                    onClick={handleRefresh}
-                    className="px-4 py-2 text-sm text-blue-600 hover:text-blue-700 transition-colors flex items-center gap-2"
-                  >
-                    <RefreshCw className="h-4 w-4" />
-                    Try again
-                  </button>
-                </div>
-              )}
-            </div>
+
+                    {cultureData.language && (
+                      <div className="space-y-4">
+                        <h3 className="font-semibold text-lg">Language</h3>
+                        <div className="grid gap-4">
+                          {cultureData.language.official &&
+                            cultureData.language.official.length > 0 && (
+                              <div className="space-y-2">
+                                <h4 className="font-medium">
+                                  Official Languages
+                                </h4>
+                                <ul className="text-sm text-gray-600 list-disc pl-4 space-y-1">
+                                  {cultureData.language.official.map(
+                                    (lang: string, index: number) => (
+                                      <li key={index}>{lang}</li>
+                                    )
+                                  )}
+                                </ul>
+                              </div>
+                            )}
+                          <div className="space-y-2">
+                            <h4 className="font-medium">Business English</h4>
+                            <p className="text-sm text-gray-600">
+                              {cultureData.language.businessEnglish ||
+                                "Information not available"}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div className="flex flex-col items-center justify-center py-8 space-y-4">
+                    <p className="text-center text-gray-500">
+                      Failed to load cultural information
+                    </p>
+                    <button
+                      onClick={handleRefresh}
+                      className="px-4 py-2 text-sm text-blue-600 hover:text-blue-700 transition-colors flex items-center gap-2"
+                    >
+                      <RefreshCw className="h-4 w-4" />
+                      Try again
+                    </button>
+                  </div>
+                )}
+              </div>
+            </ScrollArea>
           </TabsContent>
         </div>
       </Tabs>
