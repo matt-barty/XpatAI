@@ -4,6 +4,7 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import BlobCursor from "@/components/Blob";
 
 const docs = [
   {
@@ -35,6 +36,7 @@ const docs = [
 export default function DocsPage() {
   return (
     <div className="min-h-screen bg-white">
+      <BlobCursor fillColor="#0ea5e9" />
       <Header />
       <main>
         <section className="pt-32 pb-16 bg-gradient-to-b from-gray-50 to-white">

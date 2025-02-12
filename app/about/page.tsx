@@ -6,6 +6,7 @@ import { Globe2, Users, Heart, Building2, Mail, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
+import BlobCursor from "@/components/Blob";
 
 const values = [
   {
@@ -51,6 +52,7 @@ const team = [
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-white">
+      <BlobCursor fillColor="#0ea5e9" />
       <Header />
       <main>
         {/* Hero Section */}

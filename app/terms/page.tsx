@@ -3,10 +3,12 @@
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import { Scale, AlertCircle, FileCheck, Clock } from "lucide-react";
+import BlobCursor from "@/components/Blob";
 
 export default function TermsPage() {
   return (
     <div className="min-h-screen bg-white">
+      <BlobCursor fillColor="#0ea5e9" />
       <Header />
       <main className="pt-32 pb-16">
         <div className="max-w-3xl mx-auto px-4">

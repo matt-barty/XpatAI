@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Check } from "lucide-react";
 import Link from "next/link";
+import BlobCursor from "@/components/Blob";
 
 const plans = [
   {
@@ -71,6 +72,7 @@ const faqs = [
 export default function PricingPage() {
   return (
     <div className="min-h-screen bg-white">
+      <BlobCursor fillColor="#0ea5e9" />
       <Header />
       <main>
         {/* Hero Section */}

@@ -6,10 +6,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Mail, MapPin, Phone } from "lucide-react";
+import BlobCursor from "@/components/Blob";
 
 export default function ContactPage() {
   return (
     <div className="min-h-screen bg-white">
+      <BlobCursor fillColor="#0ea5e9" />
       <Header />
       <main>
         <section className="pt-32 pb-16 bg-gradient-to-b from-gray-50 to-white">

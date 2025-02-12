@@ -5,6 +5,7 @@ import Footer from "@/components/footer";
 import Image from "next/image";
 import Link from "next/link";
 import { Calendar, Clock, User } from "lucide-react";
+import BlobCursor from "@/components/Blob";
 
 const featuredPost = {
   title: "The Future of Global Mobility: AI-Powered Relocation",
@@ -49,6 +50,7 @@ const recentPosts = [
 export default function BlogPage() {
   return (
     <div className="min-h-screen bg-white">
+      <BlobCursor fillColor="#0ea5e9" />
       <Header />
       <main>
         <section className="pt-32 pb-16 bg-gradient-to-b from-gray-50 to-white">
