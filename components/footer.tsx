@@ -1,5 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
+import { FaLinkedin } from "react-icons/fa";
+import { BsTwitterX } from "react-icons/bs";
 
 const footerLinks = {
   Product: [
@@ -49,17 +51,17 @@ export default function Footer() {
                 href="https://twitter.com/xpatai"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-600 hover:text-gray-900"
+                className="text-gray-600 hover:text-gray-900 inline-flex items-center gap-2"
               >
-                Twitter →
+                <BsTwitterX className="h-5 w-5" />
               </Link>
               <Link
                 href="https://linkedin.com/company/xpatai"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-600 hover:text-gray-900"
+                className="text-gray-600 hover:text-gray-900 inline-flex items-center gap-2"
               >
-                LinkedIn →
+                <FaLinkedin className="h-5 w-5" />
               </Link>
             </div>
           </div>
