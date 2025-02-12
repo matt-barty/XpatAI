@@ -19,25 +19,19 @@ export default function Header() {
 
         <nav className="hidden md:flex items-center space-x-10">
           <Link
-            href="#features"
+            href="/#features"
             className="text-sm font-medium text-gray-600 hover:text-gray-900"
           >
             Features
           </Link>
           <Link
-            href="#explore"
-            className="text-sm font-medium text-gray-600 hover:text-gray-900"
-          >
-            Explore
-          </Link>
-          <Link
-            href="#pricing"
+            href="/pricing"
             className="text-sm font-medium text-gray-600 hover:text-gray-900"
           >
             Pricing
           </Link>
           <Link
-            href="#about"
+            href="/about"
             className="text-sm font-medium text-gray-600 hover:text-gray-900"
           >
             About
@@ -51,9 +45,11 @@ export default function Header() {
           >
             Docs →
           </Link>
-          <Button variant="outline" className="rounded-full">
-            Log in
-          </Button>
+          <Link href="/login">
+            <Button variant="outline" className="rounded-full">
+              Log in
+            </Button>
+          </Link>
         </div>
       </div>
     </header>

@@ -1,37 +1,45 @@
-import { Card } from "@/components/ui/card"
-import { MapPin, MessageCircle, Briefcase, Heart, Users } from "lucide-react"
+import { Card } from "@/components/ui/card";
+import { MapPin, MessageCircle, Briefcase, Heart, Users } from "lucide-react";
 
 const features = [
   {
     icon: MapPin,
     title: "Interactive World Map",
-    description: "Visually explore countries and get instant insights about any location with just a click.",
+    description:
+      "Visually explore countries and get instant insights about any location with just a click.",
   },
   {
     icon: MessageCircle,
     title: "AI Chat Assistant",
-    description: "Natural conversations powered by AI to answer all your questions about living abroad.",
+    description:
+      "Natural conversations powered by AI to answer all your questions about living abroad.",
   },
   {
     icon: Heart,
     title: "Healthcare & Quality of Life",
-    description: "Make informed decisions with comprehensive data on healthcare and living standards.",
+    description:
+      "Make informed decisions with comprehensive data on healthcare and living standards.",
   },
   {
     icon: Briefcase,
     title: "Work & Business",
-    description: "Explore job markets, business opportunities, and understand the local economy.",
+    description:
+      "Explore job markets, business opportunities, and understand the local economy.",
   },
   {
     icon: Users,
     title: "Cultural Insights",
-    description: "Dive deep into local customs, social norms, and cultural nuances of your destination.",
+    description:
+      "Dive deep into local customs, social norms, and cultural nuances of your destination.",
   },
-]
+];
 
 export default function Features() {
   return (
-    <section className="py-24 bg-gradient-to-b from-gray-900 to-black relative overflow-hidden">
+    <section
+      id="features"
+      className="py-24 bg-gradient-to-b from-gray-900 to-black relative overflow-hidden"
+    >
       {/* Gradient Orb Background */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 blur-3xl transform rotate-12 opacity-30" />
@@ -44,7 +52,8 @@ export default function Features() {
             Key Features
           </h2>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-            Everything you need to make informed decisions about your international journey
+            Everything you need to make informed decisions about your
+            international journey
           </p>
         </div>
 
@@ -59,14 +68,17 @@ export default function Features() {
                 <div className="mb-4 p-3 bg-gray-800/50 rounded-lg w-fit">
                   <feature.icon className="h-6 w-6 text-gray-300" />
                 </div>
-                <h3 className="text-xl font-semibold text-white mb-3">{feature.title}</h3>
-                <p className="text-gray-400 leading-relaxed">{feature.description}</p>
+                <h3 className="text-xl font-semibold text-white mb-3">
+                  {feature.title}
+                </h3>
+                <p className="text-gray-400 leading-relaxed">
+                  {feature.description}
+                </p>
               </div>
             </Card>
           ))}
         </div>
       </div>
     </section>
-  )
+  );
 }
-

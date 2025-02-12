@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Globe } from "@/components/magicui/globe";
+import Link from "next/link";
 
 export default function Hero() {
   return (
@@ -19,9 +20,11 @@ export default function Hero() {
               through AI-powered insights.
             </p>
             <div className="flex gap-4">
-              <Button size="lg" className="rounded-full">
-                Get started
-              </Button>
+              <Link href="/explore">
+                <Button size="lg" className="rounded-full">
+                  Get started
+                </Button>
+              </Link>
             </div>
           </div>
 

@@ -1,12 +1,25 @@
-import Link from "next/link"
-import { Globe } from "lucide-react"
+import Link from "next/link";
+import Image from "next/image";
 
 const footerLinks = {
-  Product: ["Features", "Security", "Team", "Enterprise"],
-  Resources: ["Docs", "Learn", "Blog", "Support"],
-  Company: ["About", "Careers", "Contact", "Partners"],
-  Legal: ["Privacy", "Terms", "Security"],
-}
+  Product: [
+    { name: "Features", href: "/#features" },
+    { name: "Explore", href: "/explore" },
+    { name: "Pricing", href: "/pricing" },
+  ],
+  Company: [
+    { name: "About", href: "/about" },
+    { name: "Contact", href: "/contact" },
+  ],
+  Resources: [
+    { name: "Docs", href: "/docs" },
+    { name: "Blog", href: "/blog" },
+  ],
+  Legal: [
+    { name: "Privacy", href: "/privacy" },
+    { name: "Terms", href: "/terms" },
+  ],
+};
 
 export default function Footer() {
   return (
@@ -14,20 +27,53 @@ export default function Footer() {
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
           <div className="col-span-2">
-            <Link href="/" className="flex items-center gap-2 font-bold text-xl mb-4">
-              <Globe className="h-6 w-6" />
+            <Link
+              href="/"
+              className="flex items-center gap-2 font-bold text-xl mb-4"
+            >
+              <Image
+                src="/earth-logo.png"
+                alt="XpatAI Logo"
+                width={28}
+                height={28}
+                className="h-7 w-7"
+              />
               XpatAI
             </Link>
-            <p className="text-gray-600 max-w-xs">Helping you navigate your global journey with AI-powered insights.</p>
+            <p className="text-gray-600 max-w-xs">
+              Your AI-powered companion for global relocation. Making
+              international transitions seamless and accessible.
+            </p>
+            <div className="mt-6 space-x-4">
+              <Link
+                href="https://twitter.com/xpatai"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-600 hover:text-gray-900"
+              >
+                Twitter →
+              </Link>
+              <Link
+                href="https://linkedin.com/company/xpatai"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-600 hover:text-gray-900"
+              >
+                LinkedIn →
+              </Link>
+            </div>
           </div>
           {Object.entries(footerLinks).map(([category, links]) => (
             <div key={category}>
               <h3 className="font-semibold mb-4">{category}</h3>
               <ul className="space-y-2">
                 {links.map((link) => (
-                  <li key={link}>
-                    <Link href="#" className="text-gray-600 hover:text-gray-900">
-                      {link}
+                  <li key={link.name}>
+                    <Link
+                      href={link.href}
+                      className="text-gray-600 hover:text-gray-900"
+                    >
+                      {link.name}
                     </Link>
                   </li>
                 ))}
@@ -35,11 +81,17 @@ export default function Footer() {
             </div>
           ))}
         </div>
-        <div className="mt-8 pt-8 border-t text-center text-gray-600">
-          <p>&copy; {new Date().getFullYear()} XpatAI. All rights reserved.</p>
+        <div className="mt-12 pt-8 border-t">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-gray-600">
+              &copy; {new Date().getFullYear()} XpatAI. All rights reserved.
+            </p>
+            <p className="text-sm text-gray-500">
+              Built with ❤️ for global citizens
+            </p>
+          </div>
         </div>
       </div>
     </footer>
-  )
+  );
 }
-
