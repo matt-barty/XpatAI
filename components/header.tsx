@@ -4,58 +4,52 @@ import { Button } from "@/components/ui/button";
 
 export default function Header() {
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-sm">
-      <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 font-bold text-xl">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-sm border-b border-gray-100">
+      <div className="container mx-auto px-6 h-16 flex items-center justify-between">
+        <Link href="/" className="flex items-center gap-3 font-bold text-xl">
           <Image
             src="/earth-logo.png"
             alt="XpatAI Logo"
-            width={24}
-            height={24}
-            className="h-6 w-6"
+            width={28}
+            height={28}
+            className="h-7 w-7"
           />
           XpatAI
         </Link>
 
-        <nav className="hidden md:flex items-center space-x-8">
+        <nav className="hidden md:flex items-center space-x-10">
           <Link
             href="#features"
-            className="text-sm font-medium hover:text-gray-600"
+            className="text-sm font-medium text-gray-600 hover:text-gray-900"
           >
             Features
           </Link>
           <Link
             href="#explore"
-            className="text-sm font-medium hover:text-gray-600"
+            className="text-sm font-medium text-gray-600 hover:text-gray-900"
           >
             Explore
           </Link>
           <Link
             href="#pricing"
-            className="text-sm font-medium hover:text-gray-600"
+            className="text-sm font-medium text-gray-600 hover:text-gray-900"
           >
             Pricing
           </Link>
           <Link
             href="#about"
-            className="text-sm font-medium hover:text-gray-600"
+            className="text-sm font-medium text-gray-600 hover:text-gray-900"
           >
             About
           </Link>
         </nav>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-6">
           <Link
             href="/docs"
-            className="text-sm font-medium hover:text-gray-600 hidden md:block"
+            className="text-sm font-medium text-gray-600 hover:text-gray-900 hidden md:block"
           >
             Docs →
-          </Link>
-          <Link
-            href="/demo"
-            className="text-sm font-medium hover:text-gray-600 hidden md:block"
-          >
-            Demo →
           </Link>
           <Button variant="outline" className="rounded-full">
             Log in

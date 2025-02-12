@@ -12,6 +12,7 @@ import BlobCursor from "@/components/Blob";
 export default function Home() {
   return (
     <div className="min-h-screen bg-white">
+      <BlobCursor fillColor="#0ea5e9" />
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -29,7 +30,6 @@ export default function Home() {
         <Newsletter />
       </main>
       <Footer />
-      <BlobCursor fillColor="#0ea5e9" />
     </div>
   );
 }

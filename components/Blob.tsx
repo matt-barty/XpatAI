@@ -1,7 +1,7 @@
 "use client";
 
 import { useTrail, animated } from "@react-spring/web";
-import { useRef, useEffect, useCallback } from "react";
+import { useEffect } from "react";
 
 const fast = { tension: 1200, friction: 40 };
 const slow = { mass: 10, tension: 200, friction: 50 };
@@ -20,41 +20,23 @@ export default function BlobCursor({
     config: i === 0 ? fast : slow,
   }));
 
-  const ref = useRef<HTMLDivElement>(null);
-
-  const updatePosition = useCallback(() => {
-    if (ref.current) {
-      const rect = ref.current.getBoundingClientRect();
-      return { left: rect.left, top: rect.top };
-    }
-    return { left: 0, top: 0 };
-  }, []);
-
-  const handleMove = (e: MouseEvent | TouchEvent) => {
-    const { left, top } = updatePosition();
-    const x = "clientX" in e ? e.clientX : e.touches[0].clientX;
-    const y = "clientY" in e ? e.clientY : e.touches[0].clientY;
-    api.start({ xy: [x - left, y - top] });
+  const handleMove = (e: MouseEvent) => {
+    api.start({ xy: [e.clientX, e.clientY] });
   };
 
   useEffect(() => {
-    const handleResize = () => {
-      updatePosition();
-    };
-    window.addEventListener("resize", handleResize);
+    window.addEventListener("mousemove", handleMove);
     return () => {
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("mousemove", handleMove);
     };
-  }, [updatePosition]);
+  }, []);
 
-  // Sizes for each animated div
   const sizes = [
     { width: 60, height: 60 },
     { width: 125, height: 125 },
     { width: 75, height: 75 },
   ];
 
-  // Styles for pseudo-element replacements
   const pseudoStyles = [
     { top: 20, left: 20, width: 20, height: 20 },
     { top: 35, left: 35, width: 35, height: 35 },
@@ -62,7 +44,10 @@ export default function BlobCursor({
   ];
 
   return (
-    <div className="fixed top-0 left-0 w-full h-full" style={{ zIndex: 100 }}>
+    <div
+      className="fixed top-0 left-0 w-full h-full pointer-events-none"
+      style={{ zIndex: 100 }}
+    >
       <svg style={{ position: "absolute", width: 0, height: 0 }}>
         <filter id="blob">
           <feGaussianBlur in="SourceGraphic" result="blur" stdDeviation="30" />
@@ -73,23 +58,13 @@ export default function BlobCursor({
         </filter>
       </svg>
       <div
-        ref={ref}
-        className="absolute w-full h-full overflow-hidden bg-transparent select-none cursor-default"
-        style={{
-          filter: 'url("#blob")',
-          WebkitTouchCallout: "none",
-          WebkitUserSelect: "none",
-          KhtmlUserSelect: "none",
-          MozUserSelect: "none",
-          msUserSelect: "none",
-        }}
-        onMouseMove={(e) => handleMove(e as unknown as MouseEvent)}
-        onTouchMove={(e) => handleMove(e as unknown as TouchEvent)}
+        className="absolute w-full h-full overflow-hidden pointer-events-none"
+        style={{ filter: 'url("#blob")' }}
       >
         {trail.map((props, index) => (
           <animated.div
             key={index}
-            className="absolute opacity-60 shadow-[10px_10px_5px_0_rgba(0,0,0,0.75)]"
+            className="absolute opacity-60 shadow-[10px_10px_5px_0_rgba(0,0,0,0.75)] pointer-events-none"
             style={{
               transform: props.xy.to(trans),
               width: `${sizes[index].width}px`,
@@ -99,7 +74,6 @@ export default function BlobCursor({
               backgroundColor: fillColor,
             }}
           >
-            {/* Replacing the ::after pseudo-element */}
             <div
               className="pointer-events-none"
               style={{
