@@ -48,7 +48,7 @@ export default function Footer() {
             </p>
             <div className="mt-6 space-x-4">
               <Link
-                href="https://twitter.com/xpatai"
+                href="https://twitter.com/xpat_ai"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-600 hover:text-gray-900 inline-flex items-center gap-2"
