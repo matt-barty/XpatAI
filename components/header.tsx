@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { Sparkles } from "lucide-react";
 
 export default function Header() {
   return (
@@ -38,7 +39,7 @@ export default function Header() {
           </Link>
         </nav>
 
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-3">
           <Link
             href="/docs"
             className="text-sm font-medium text-gray-600 hover:text-gray-900 hidden md:block"
@@ -48,6 +49,12 @@ export default function Header() {
           <Link href="/login">
             <Button variant="outline" className="rounded-full">
               Log in
+            </Button>
+          </Link>
+          <Link href="/explore">
+            <Button className="rounded-full hidden md:flex items-center gap-2">
+              <Sparkles className="w-4 h-4" />
+              Join Beta
             </Button>
           </Link>
         </div>
