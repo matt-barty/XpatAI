@@ -241,10 +241,11 @@ export default function BlogPost() {
                         Singapore
                       </h3>
                       <p className="text-gray-700 mb-4">
-                        Singapore's system combines government subsidies with
-                        personal responsibility through mandatory savings
+                        Singapore&apos;s system combines government subsidies
+                        with personal responsibility through mandatory savings
                         accounts. Known for its efficiency and high-quality
-                        care, it's often cited as a model healthcare system.
+                        care, it&apos;s often cited as a model healthcare
+                        system.
                       </p>
                       <div className="bg-gray-50 p-4 rounded-lg">
                         <p className="text-sm text-gray-600">

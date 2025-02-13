@@ -50,8 +50,8 @@ export default function DocsPage() {
                 Documentation
               </h1>
               <p className="text-xl text-gray-600">
-                Everything you need to know about using XpatAI's features and
-                APIs.
+                Everything you need to know about using XpatAI&apos;s features
+                and APIs.
               </p>
             </div>
           </div>
@@ -98,7 +98,7 @@ export default function DocsPage() {
                     Introduction
                   </h2>
                   <p className="text-gray-700 leading-relaxed">
-                    Welcome to XpatAI's documentation. Here you'll find
+                    Welcome to XpatAI&apos;s documentation. Here you&apos;ll find
                     comprehensive guides and documentation to help you start
                     working with XpatAI as quickly as possible, as well as
                     support if you get stuck.
@@ -174,9 +174,9 @@ export default function DocsPage() {
                   </h2>
                   <div className="bg-gray-50 p-6 rounded-lg">
                     <p className="text-gray-700 leading-relaxed">
-                      XpatAI is a web-based platform, so there's no installation
-                      required. Simply sign up and start using our services
-                      through your web browser.
+                      XpatAI is a web-based platform, so there&apos;s no
+                      installation required. Simply sign up and start using our
+                      services through your web browser.
                     </p>
                     <div className="mt-6">
                       <Link href="/signup">

@@ -77,8 +77,8 @@ export default function AboutPage() {
                   It all began at a hackathon in late 2024, where our founder
                   Matthew Chen and a small team of developers had 48 hours to
                   build something innovative. The challenge? Create a solution
-                  that could make a real difference in people's lives. Drawing
-                  from his own experiences helping friends navigate
+                  that could make a real difference in people&apos;s lives.
+                  Drawing from his own experiences helping friends navigate
                   international moves, Matthew had an idea: what if AI could
                   make the complex process of moving abroad simple and
                   accessible?
@@ -111,7 +111,7 @@ export default function AboutPage() {
                   human expertise. The goal was ambitious but clear: create a
                   revolutionary platform that not only provides accurate,
                   up-to-date information but truly understands and adapts to
-                  each person's unique journey.
+                  each person&apos;s unique journey.
                 </p>
 
                 <p className="text-lg text-gray-600 mb-8 leading-relaxed">
@@ -126,13 +126,13 @@ export default function AboutPage() {
 
                 <p className="text-lg text-gray-600 mb-8 leading-relaxed">
                   Today, XpatAI has evolved far beyond its hackathon origins to
-                  become a trusted companion for international journeys. We're
-                  proud to help thousands of people make informed decisions
-                  about their global transitions, but we're just getting
-                  started. Our vision remains as ambitious as it was during
-                  those initial 48 hours – to make international relocation
-                  accessible and seamless for everyone, breaking down barriers
-                  and bringing the world closer together.
+                  become a trusted companion for international journeys.
+                  We&apos;re proud to help thousands of people make informed
+                  decisions about their global transitions, but we&apos;re just
+                  getting started. Our vision remains as ambitious as it was
+                  during those initial 48 hours – to make international
+                  relocation accessible and seamless for everyone, breaking down
+                  barriers and bringing the world closer together.
                 </p>
 
                 <div className="text-center mt-12 mb-8">
@@ -140,10 +140,10 @@ export default function AboutPage() {
                     Our Promise
                   </h3>
                   <p className="text-lg text-gray-600 italic">
-                    "We're committed to being the bridge that connects people to
-                    their global aspirations, making the journey of
+                    &quot;We&apos;re committed to being the bridge that connects
+                    people to their global aspirations, making the journey of
                     international transition as enriching as the destination
-                    itself."
+                    itself.&quot;
                   </p>
                 </div>
               </div>

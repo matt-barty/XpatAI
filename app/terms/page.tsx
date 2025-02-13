@@ -23,9 +23,9 @@ export default function TermsPage() {
                 Agreement to Terms
               </h2>
               <p className="text-gray-700 mb-4">
-                By accessing or using XpatAI's website and services, you agree
-                to be bound by these Terms of Service. If you disagree with any
-                part of these terms, you may not access our services.
+                By accessing or using XpatAI&apos;s website and services, you
+                agree to be bound by these Terms of Service. If you disagree
+                with any part of these terms, you may not access our services.
               </p>
             </section>
 
@@ -150,9 +150,9 @@ export default function TermsPage() {
                 <p className="text-gray-700">
                   We reserve the right to modify or replace these Terms at any
                   time. We will provide notice of any changes by posting the new
-                  Terms on this page and updating the "last updated" date. Your
-                  continued use of the service after such changes constitutes
-                  acceptance of the new Terms.
+                  Terms on this page and updating the &quot;last updated&quot;
+                  date. Your continued use of the service after such changes
+                  constitutes acceptance of the new Terms.
                 </p>
               </div>
             </section>

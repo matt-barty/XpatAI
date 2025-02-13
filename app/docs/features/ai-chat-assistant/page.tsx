@@ -120,8 +120,8 @@ export default function AIChatAssistantDocs() {
                         Customization
                       </h3>
                       <p className="text-gray-600">
-                        Adjust the AI's responses to match your knowledge level
-                        and preferences.
+                        Adjust the AI&apos;s responses to match your knowledge
+                        level and preferences.
                       </p>
                     </div>
                   </div>
@@ -213,7 +213,7 @@ export default function AIChatAssistantDocs() {
                         Follow Up
                       </h3>
                       <p className="text-gray-600">
-                        Don't hesitate to ask follow-up questions for
+                        Don&apos;t hesitate to ask follow-up questions for
                         clarification or more details.
                       </p>
                     </div>

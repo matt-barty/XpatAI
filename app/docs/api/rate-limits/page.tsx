@@ -114,8 +114,8 @@ export default function RateLimitsDocs() {
                       X-RateLimit-Limit
                     </code>
                     <p className="text-gray-600">
-                      The maximum number of requests you're permitted to make
-                      per hour
+                      The maximum number of requests you&apos;re permitted to
+                      make per hour
                     </p>
                   </div>
 

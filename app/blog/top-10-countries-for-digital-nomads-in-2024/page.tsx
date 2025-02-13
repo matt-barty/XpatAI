@@ -52,10 +52,10 @@ export default function BlogPost() {
             <div className="bg-gray-50 border-l-4 border-sky-500 p-6 rounded-r-lg mb-12">
               <p className="text-lg text-gray-700 italic">
                 As remote work continues to reshape the global workforce, more
-                professionals are embracing the digital nomad lifestyle. We've
-                analyzed factors like internet speed, cost of living, visa
-                policies, and quality of life to bring you the top destinations
-                for remote workers in 2024.
+                professionals are embracing the digital nomad lifestyle.
+                We&apos;ve analyzed factors like internet speed, cost of living,
+                visa policies, and quality of life to bring you the top
+                destinations for remote workers in 2024.
               </p>
             </div>
           </div>
@@ -125,7 +125,7 @@ export default function BlogPost() {
                       Portugal
                     </h2>
                     <p className="text-gray-600">
-                      The Digital Nomad's Paradise in Europe
+                      The Digital Nomad&apos;s Paradise in Europe
                     </p>
                   </div>
                 </div>
@@ -168,13 +168,13 @@ export default function BlogPost() {
                       Thailand
                     </h2>
                     <p className="text-gray-600">
-                      Southeast Asia's Remote Work Hub
+                      Southeast Asia&apos;s Remote Work Hub
                     </p>
                   </div>
                 </div>
                 <div className="space-y-4">
                   <p className="text-gray-700">
-                    Thailand's new Smart Visa program, combined with its
+                    Thailand&apos;s new Smart Visa program, combined with its
                     legendary low cost of living and tropical lifestyle, makes
                     it an irresistible destination for digital nomads. Cities
                     like Chiang Mai and Bangkok offer modern coworking spaces

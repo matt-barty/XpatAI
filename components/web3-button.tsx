@@ -4,13 +4,20 @@ import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 
+type PhantomSolana = NonNullable<PhantomProvider["solana"]>;
+
 export default function Web3Button() {
-  const [phantom, setPhantom] = useState<any>(null);
+  const [phantom, setPhantom] = useState<PhantomSolana | null>(null);
   const [connected, setConnected] = useState(false);
 
   useEffect(() => {
-    if (window.phantom?.solana) {
-      setPhantom(window.phantom?.solana);
+    if (typeof window !== "undefined") {
+      const provider = window.phantom?.solana;
+      setPhantom(provider ?? null);
+
+      // Listen for wallet connection changes
+      provider?.on("connect", () => setConnected(true));
+      provider?.on("disconnect", () => setConnected(false));
     }
   }, []);
 
@@ -19,13 +26,13 @@ export default function Web3Button() {
       if (phantom) {
         const { publicKey } = await phantom.connect();
         setConnected(true);
-        // Here you can handle the successful connection
         console.log("Connected with public key:", publicKey.toString());
       } else {
         window.open("https://phantom.app/", "_blank");
       }
     } catch (error) {
       console.error("Error connecting to Phantom wallet:", error);
+      setConnected(false);
     }
   };
 

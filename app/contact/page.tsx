@@ -21,8 +21,8 @@ export default function ContactPage() {
                 Contact Us
               </h1>
               <p className="text-xl text-gray-600">
-                Have questions? We'd love to hear from you. Send us a message
-                and we'll respond as soon as possible.
+                Have questions? We&apos;d love to hear from you. Send us a
+                message and we&apos;ll respond as soon as possible.
               </p>
             </div>
           </div>
@@ -58,8 +58,8 @@ export default function ContactPage() {
                 <div>
                   <h3 className="text-2xl font-bold mb-6">Get in Touch</h3>
                   <p className="text-gray-600 mb-8">
-                    Whether you're curious about features, a free trial, or even
-                    press—we're ready to answer any and all questions.
+                    Whether you&apos;re curious about features, a free trial, or
+                    even press—we&apos;re ready to answer any and all questions.
                   </p>
                 </div>
 

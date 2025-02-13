@@ -145,9 +145,9 @@ export default function BlogPost() {
                 The Role of XpatAI
               </h2>
               <p className="text-gray-700 leading-relaxed mb-6">
-                At XpatAI, we're at the forefront of this transformation. Our
-                platform combines cutting-edge AI technology with deep expertise
-                in global mobility to provide:
+                At XpatAI, we&apos;re at the forefront of this transformation.
+                Our platform combines cutting-edge AI technology with deep
+                expertise in global mobility to provide:
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
                 <div className="bg-gray-50 p-4 rounded-lg">
@@ -193,10 +193,10 @@ export default function BlogPost() {
               </h2>
               <p className="text-gray-700 leading-relaxed">
                 The integration of AI in global mobility represents more than
-                just technological advancement – it's a fundamental shift in how
-                we approach international relocation. As we continue to develop
-                and refine these technologies, the dream of seamless global
-                mobility comes closer to reality.
+                just technological advancement – it&apos;s a fundamental shift
+                in how we approach international relocation. As we continue to
+                develop and refine these technologies, the dream of seamless
+                global mobility comes closer to reality.
               </p>
             </section>
           </div>
