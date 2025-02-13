@@ -8,12 +8,17 @@ import Link from "next/link";
 import { Github } from "lucide-react";
 import BlobCursor from "@/components/Blob";
 import Web3Button from "@/components/web3-button";
+import BetaNotice from "@/components/beta-notice";
+import { useState } from "react";
 
 export default function LoginPage() {
+  const [showBetaNotice, setShowBetaNotice] = useState(true);
+
   return (
     <div className="min-h-screen bg-white">
       <BlobCursor fillColor="#0ea5e9" />
       <Header />
+      {showBetaNotice && <BetaNotice />}
       <main className="pt-32 pb-16">
         <div className="container mx-auto px-4">
           <div className="max-w-md mx-auto">

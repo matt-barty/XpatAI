@@ -24,6 +24,7 @@ import {
 import { Header } from "../components/Header";
 import { ThemeProvider } from "@/app/contexts/ThemeContext";
 import { InitialOverlay } from "../components/InitialOverlay";
+import BetaNotice from "@/components/beta-notice";
 
 export default function Home() {
   const user = useUser();
@@ -33,6 +34,7 @@ export default function Home() {
   const mapRef = useRef<any>(null);
   const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
   const [countryData, setCountryData] = useState<any>(null);
+  const [showBetaNotice, setShowBetaNotice] = useState(true);
 
   const handleFocusCountry = (countryName: string) => {
     if (mapRef.current) {
@@ -50,6 +52,16 @@ export default function Home() {
       console.error("Failed to load country data:", error);
     }
   };
+
+  // If beta notice is shown, don't render the main app content
+  if (showBetaNotice) {
+    return (
+      <ThemeProvider>
+        <Header />
+        <BetaNotice />
+      </ThemeProvider>
+    );
+  }
 
   return (
     <ThemeProvider>
