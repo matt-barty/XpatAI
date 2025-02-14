@@ -6,7 +6,11 @@ import Image from "next/image";
 
 type PhantomSolana = NonNullable<PhantomProvider["solana"]>;
 
-export default function Web3Button() {
+interface Web3ButtonProps {
+  onConnect?: (publicKey: string) => void;
+}
+
+export default function Web3Button({ onConnect }: Web3ButtonProps) {
   const [phantom, setPhantom] = useState<PhantomSolana | null>(null);
   const [connected, setConnected] = useState(false);
 
@@ -26,6 +30,7 @@ export default function Web3Button() {
       if (phantom) {
         const { publicKey } = await phantom.connect();
         setConnected(true);
+        onConnect?.(publicKey.toString());
         console.log("Connected with public key:", publicKey.toString());
       } else {
         window.open("https://phantom.app/", "_blank");

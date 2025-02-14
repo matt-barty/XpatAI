@@ -11,6 +11,7 @@ export default function BetaNotice() {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [isSendingTokens, setIsSendingTokens] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,6 +19,23 @@ export default function BetaNotice() {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     setSubmitted(true);
     setIsSubmitting(false);
+  };
+
+  const handleWalletConnected = async (publicKey: string) => {
+    try {
+      setIsSendingTokens(true);
+      // Here you would implement the actual token sending logic using the Solana web3.js library
+      // For example:
+      // 1. Create a token transfer instruction
+      // 2. Send the transaction
+      // 3. Wait for confirmation
+      await new Promise((resolve) => setTimeout(resolve, 1500)); // Simulated delay
+      setIsSendingTokens(false);
+      setSubmitted(true);
+    } catch (error) {
+      console.error("Error sending tokens:", error);
+      setIsSendingTokens(false);
+    }
   };
 
   return (
@@ -85,9 +103,11 @@ export default function BetaNotice() {
           </div>
 
           <div className="bg-gray-50 p-4 rounded-lg space-y-4">
-            <Web3Button />
+            <Web3Button onConnect={handleWalletConnected} />
             <p className="text-xs text-gray-500 text-center">
-              Connect wallet to participate in token launch
+              {isSendingTokens
+                ? "Sending XPAT tokens to your wallet..."
+                : "Connect wallet to receive XPAT tokens"}
             </p>
           </div>
         </div>
@@ -110,7 +130,7 @@ export default function BetaNotice() {
             <Button
               type="submit"
               className="w-full rounded-lg bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600"
-              disabled={isSubmitting}
+              disabled={isSubmitting || isSendingTokens}
             >
               {isSubmitting ? "Submitting..." : "Join AI Beta Program"}
             </Button>
@@ -125,7 +145,9 @@ export default function BetaNotice() {
             <div className="bg-green-50 text-green-800 p-4 rounded-lg">
               <p className="font-medium">Welcome to XpatAI! 🎉</p>
               <p className="text-sm mt-1">
-                You're on the whitelist for our AI beta and token launch.
+                {isSendingTokens
+                  ? "Sending your XPAT tokens..."
+                  : "You will receive XPAT tokens and be added to the beta program!"}
               </p>
             </div>
             <Link href="/">

@@ -5,8 +5,9 @@ import Footer from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Check, Brain, Sparkles, Coins, Users } from "lucide-react";
-import Link from "next/link";
 import BlobCursor from "@/components/Blob";
+import BetaNotice from "@/components/beta-notice";
+import { useState } from "react";
 
 const benefits = [
   "Interactive world map access",
@@ -20,10 +21,13 @@ const benefits = [
 ];
 
 export default function PricingPage() {
+  const [showBetaNotice, setShowBetaNotice] = useState(false);
+
   return (
     <div className="min-h-screen bg-white">
       <BlobCursor fillColor="#0ea5e9" />
       <Header />
+      {showBetaNotice && <BetaNotice />}
       <main>
         {/* Hero Section */}
         <section className="pt-32 pb-16 bg-gradient-to-b from-gray-50 to-white">
@@ -79,7 +83,12 @@ export default function PricingPage() {
                   </p>
                 </div>
 
-                <Button className="w-full rounded-full">Get XPAT Tokens</Button>
+                <Button
+                  className="w-full rounded-full"
+                  onClick={() => setShowBetaNotice(true)}
+                >
+                  Get XPAT Tokens
+                </Button>
               </Card>
             </div>
           </div>
