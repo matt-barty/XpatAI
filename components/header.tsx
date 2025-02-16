@@ -37,6 +37,12 @@ export default function Header() {
           >
             About
           </Link>
+          <Link
+            href="/docs/changelog"
+            className="text-sm font-medium text-gray-600 hover:text-gray-900"
+          >
+            Changelog
+          </Link>
         </nav>
 
         <div className="flex items-center gap-3">

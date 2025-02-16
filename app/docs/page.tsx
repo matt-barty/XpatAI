@@ -5,7 +5,7 @@ import Footer from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import BlobCursor from "@/components/Blob";
-import { Book, Map, MessageSquare, Database } from "lucide-react";
+import { Book, Map, MessageSquare, Database, History } from "lucide-react";
 
 const docs = [
   {
@@ -34,6 +34,11 @@ const docs = [
       { name: "Endpoints", href: "/docs/api/endpoints" },
       { name: "Rate Limits", href: "/docs/api/rate-limits" },
     ],
+  },
+  {
+    title: "Updates",
+    icon: History,
+    items: [{ name: "Changelog", href: "/docs/changelog" }],
   },
 ];
 
@@ -98,9 +103,9 @@ export default function DocsPage() {
                     Introduction
                   </h2>
                   <p className="text-gray-700 leading-relaxed">
-                    Welcome to XpatAI&apos;s documentation. Here you&apos;ll find
-                    comprehensive guides and documentation to help you start
-                    working with XpatAI as quickly as possible, as well as
+                    Welcome to XpatAI&apos;s documentation. Here you&apos;ll
+                    find comprehensive guides and documentation to help you
+                    start working with XpatAI as quickly as possible, as well as
                     support if you get stuck.
                   </p>
                 </section>
