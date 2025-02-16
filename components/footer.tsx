@@ -61,7 +61,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 className="text-gray-600 hover:text-gray-900 inline-flex items-center gap-2"
               >
-                <FaTelegramPlane className="h-5 w-5" />
+                <FaTelegramPlane className="h-[24px] w-[24px]" />
               </Link>
             </div>
           </div>
