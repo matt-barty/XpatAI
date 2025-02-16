@@ -12,7 +12,7 @@ const featuredPost = {
   excerpt:
     "Discover how artificial intelligence is revolutionizing the way people move across borders and make informed decisions about their international transitions.",
   image: "/blog1.png",
-  author: "Matthew Chen",
+  author: "Matthew Barter",
   date: "Jan 24, 2025",
   readTime: "5 min read",
 };

@@ -30,9 +30,9 @@ const values = [
 
 const team = [
   {
-    name: "Matthew Chen",
-    role: "CEO & Founder",
-    image: "/matthew.jpg",
+    name: "Matthew Barter",
+    role: "Founder & CEO",
+    image: "/matt.jpeg",
     bio: "Tech innovator with a passion for solving global mobility challenges through AI.",
   },
   {
@@ -61,7 +61,7 @@ export default function AboutPage() {
             <div className="text-center max-w-3xl mx-auto">
               <h1 className="text-4xl md:text-6xl font-bold mb-6">Our Story</h1>
               <p className="text-xl text-gray-600 leading-relaxed">
-                From a 48-hour hackathon to a global mission: transforming how
+                From a 24-hour hackathon to a global mission: transforming how
                 people navigate their international adventures.
               </p>
             </div>
@@ -74,11 +74,11 @@ export default function AboutPage() {
             <div className="max-w-3xl mx-auto">
               <div className="prose prose-lg mx-auto">
                 <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-                  It all began at a hackathon in late 2024, where our founder
-                  Matthew Chen and a small team of developers had 48 hours to
-                  build something innovative. The challenge? Create a solution
-                  that could make a real difference in people&apos;s lives.
-                  Drawing from his own experiences helping friends navigate
+                  It all started at a hackathon in November 2023, where Matthew
+                  Barter and a small team of developers had 24 hours to build
+                  something innovative. The challenge? Create a solution that
+                  could make a real difference in people&apos;s lives. Drawing
+                  from his own experiences helping friends navigate
                   international moves, Matthew had an idea: what if AI could
                   make the complex process of moving abroad simple and
                   accessible?
@@ -130,7 +130,7 @@ export default function AboutPage() {
                   We&apos;re proud to help thousands of people make informed
                   decisions about their global transitions, but we&apos;re just
                   getting started. Our vision remains as ambitious as it was
-                  during those initial 48 hours – to make international
+                  during those initial 24 hours – to make international
                   relocation accessible and seamless for everyone, breaking down
                   barriers and bringing the world closer together.
                 </p>

@@ -24,6 +24,36 @@ export default function Home() {
       <Header />
       <main>
         <Hero />
+
+        {/* Video Demo Section */}
+        <section className="py-24 bg-gradient-to-b from-white to-gray-50">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-5xl font-bold mb-6">
+                See XpatAI in Action
+              </h2>
+              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                Watch how our AI-powered platform helps you explore and
+                understand different countries
+              </p>
+            </div>
+
+            <div className="max-w-4xl mx-auto">
+              <div className="relative aspect-video bg-gray-900 rounded-2xl overflow-hidden shadow-2xl">
+                <video
+                  className="absolute inset-0 w-full h-full object-cover"
+                  src="/hackathon.mp4"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  controls
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
         <Features />
         <DarkFeatures />
         <Stats />

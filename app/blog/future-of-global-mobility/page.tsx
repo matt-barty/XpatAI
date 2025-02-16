@@ -25,7 +25,7 @@ export default function BlogPost() {
             <div className="flex items-center gap-6 text-sm text-gray-500 mb-8">
               <div className="flex items-center gap-2">
                 <User className="w-4 h-4" />
-                Matthew Chen
+                Matthew Barter
               </div>
               <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4" />
