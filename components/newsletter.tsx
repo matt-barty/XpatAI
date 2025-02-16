@@ -54,7 +54,7 @@ export default function Newsletter() {
                   Thanks for joining! 🎉
                 </p>
                 <p className="text-sm text-gray-600">
-                  We'll be in touch with your beta access soon.
+                  We&apos;ll be in touch with your beta access soon.
                 </p>
               </div>
             </div>
