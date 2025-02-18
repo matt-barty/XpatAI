@@ -27,10 +27,20 @@ import {
   CheckCircle2,
   Clock,
   AlertCircle,
+  Brain,
+  Coins,
 } from "lucide-react";
 import BlobCursor from "@/components/Blob";
 import { useState } from "react";
 import Link from "next/link";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 
 // Add interfaces at the top of the file after imports
 interface Task {
@@ -71,6 +81,17 @@ interface TrackedCountry {
   cities?: City[];
   requirements?: string[];
   timeline?: TimelineEvent[];
+}
+
+// Add new interface for AI Insights
+interface AIInsight {
+  type: "recommendation" | "alert" | "prediction" | "tip";
+  title: string;
+  description: string;
+  country?: string;
+  date: string;
+  confidence: number;
+  category: "visa" | "housing" | "job" | "culture" | "finance";
 }
 
 // Update the userData type and data to match our interfaces
@@ -176,6 +197,48 @@ const userData = {
       ],
     },
   ] as TrackedCountry[],
+  aiInsights: [
+    {
+      type: "recommendation",
+      title: "Consider Fukuoka for Tech Opportunities",
+      description:
+        "Based on your profile and preferences, Fukuoka's startup visa program and growing tech scene aligns well with your background.",
+      country: "Japan",
+      date: "2024-01-15",
+      confidence: 89,
+      category: "job",
+    },
+    {
+      type: "alert",
+      title: "Visa Requirement Update",
+      description:
+        "Japan has updated its highly-skilled professional visa requirements. Your current profile meets the new criteria.",
+      country: "Japan",
+      date: "2024-01-10",
+      confidence: 95,
+      category: "visa",
+    },
+    {
+      type: "prediction",
+      title: "Housing Market Trend",
+      description:
+        "Housing prices in Singapore's tech districts are predicted to stabilize in Q2 2024, suggesting a good time to plan relocation.",
+      country: "Singapore",
+      date: "2024-01-08",
+      confidence: 78,
+      category: "housing",
+    },
+    {
+      type: "tip",
+      title: "Cultural Integration",
+      description:
+        "Based on your interests, joining a local programming community in Tokyo could fast-track your professional network building.",
+      country: "Japan",
+      date: "2024-01-05",
+      confidence: 85,
+      category: "culture",
+    },
+  ] as AIInsight[],
 };
 
 const getStatusColor = (status: string) => {
@@ -213,9 +276,44 @@ const getTimelineColor = (date: string) => {
   return "bg-gray-100 text-gray-700";
 };
 
+// Add helper function for insight type styling
+const getInsightTypeStyle = (type: AIInsight["type"]) => {
+  switch (type) {
+    case "recommendation":
+      return "bg-blue-50 text-blue-700 border-blue-200";
+    case "alert":
+      return "bg-amber-50 text-amber-700 border-amber-200";
+    case "prediction":
+      return "bg-purple-50 text-purple-700 border-purple-200";
+    case "tip":
+      return "bg-green-50 text-green-700 border-green-200";
+    default:
+      return "bg-gray-50 text-gray-700 border-gray-200";
+  }
+};
+
+// Add helper function for category icons
+const getCategoryIcon = (category: AIInsight["category"]) => {
+  switch (category) {
+    case "visa":
+      return <FileText className="h-4 w-4" />;
+    case "housing":
+      return <Building2 className="h-4 w-4" />;
+    case "job":
+      return <Briefcase className="h-4 w-4" />;
+    case "culture":
+      return <Globe2 className="h-4 w-4" />;
+    case "finance":
+      return <Coins className="h-4 w-4" />;
+  }
+};
+
 export default function DashboardPage() {
   const [showRecentActivity, setShowRecentActivity] = useState(false);
   const [expandedCountry, setExpandedCountry] = useState<string | null>(null);
+  const [selectedInsight, setSelectedInsight] = useState<AIInsight | null>(
+    null
+  );
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -641,13 +739,242 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Placeholder for AI Insights Section */}
+          {/* AI Insights Section */}
           <div className="bg-white rounded-lg border border-gray-200 p-6 mb-8">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">
-              AI Insights
-            </h2>
-            <p className="text-gray-600">Coming soon...</p>
+            <div className="flex items-center justify-between mb-6">
+              <div className="space-y-1">
+                <h2 className="text-xl font-bold text-gray-900">AI Insights</h2>
+                <p className="text-sm text-gray-500">
+                  Personalized recommendations and predictions based on your
+                  profile
+                </p>
+              </div>
+              <Button variant="outline" className="gap-2">
+                <Brain className="h-4 w-4" />
+                Generate New Insights
+              </Button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {userData.aiInsights.map((insight, index) => (
+                <Card
+                  key={index}
+                  className={`border ${getInsightTypeStyle(
+                    insight.type
+                  )} group hover:shadow-md transition-all`}
+                >
+                  <div className="p-4">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex items-start gap-3">
+                        <div
+                          className={`p-2 rounded-lg ${getInsightTypeStyle(
+                            insight.type
+                          )}`}
+                        >
+                          {getCategoryIcon(insight.category)}
+                        </div>
+                        <div>
+                          <h3 className="font-medium text-gray-900 mb-1">
+                            {insight.title}
+                          </h3>
+                          {insight.country && (
+                            <div className="flex items-center gap-1 text-sm text-gray-500">
+                              <MapPin className="h-3 w-3" />
+                              <span>{insight.country}</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <div className="px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+                              {insight.confidence}% confidence
+                            </div>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>AI confidence score based on available data</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
+
+                    <p className="text-sm text-gray-600 mb-3">
+                      {insight.description}
+                    </p>
+
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-gray-500">
+                        Generated on{" "}
+                        {new Date(insight.date).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "2-digit",
+                          day: "2-digit",
+                        })}
+                      </span>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-8"
+                        onClick={() => setSelectedInsight(insight)}
+                      >
+                        Learn More
+                      </Button>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
+
+            <div className="mt-4 pt-4 border-t border-gray-100">
+              <div className="flex items-center justify-between">
+                <p className="text-sm text-gray-500">
+                  Insights are updated daily based on your activity and
+                  preferences
+                </p>
+                <Button variant="link" className="text-sm">
+                  View All Insights →
+                </Button>
+              </div>
+            </div>
           </div>
+
+          {/* AI Insight Detail Modal */}
+          <Dialog
+            open={selectedInsight !== null}
+            onOpenChange={() => setSelectedInsight(null)}
+          >
+            {selectedInsight && (
+              <DialogContent className="max-w-2xl">
+                <DialogHeader>
+                  <div
+                    className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium mb-2 ${getInsightTypeStyle(
+                      selectedInsight.type
+                    )}`}
+                  >
+                    {getCategoryIcon(selectedInsight.category)}
+                    <span className="capitalize">{selectedInsight.type}</span>
+                  </div>
+                  <DialogTitle className="text-xl">
+                    {selectedInsight.title}
+                  </DialogTitle>
+                  <DialogDescription className="text-base text-gray-600">
+                    {selectedInsight.description}
+                  </DialogDescription>
+                </DialogHeader>
+
+                <div className="space-y-4">
+                  {/* Metadata */}
+                  <div className="grid grid-cols-2 gap-4 p-4 bg-gray-50 rounded-lg">
+                    <div>
+                      <p className="text-sm text-gray-500 mb-1">Category</p>
+                      <div className="flex items-center gap-2">
+                        {getCategoryIcon(selectedInsight.category)}
+                        <span className="capitalize">
+                          {selectedInsight.category}
+                        </span>
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-500 mb-1">
+                        Confidence Score
+                      </p>
+                      <div className="flex items-center gap-2">
+                        <Progress
+                          value={selectedInsight.confidence}
+                          className="w-24"
+                        />
+                        <span className="text-sm font-medium">
+                          {selectedInsight.confidence}%
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Related Information */}
+                  {selectedInsight.country && (
+                    <div className="p-4 border border-gray-100 rounded-lg">
+                      <h3 className="font-medium text-gray-900 mb-3">
+                        Related Country Information
+                      </h3>
+                      <div className="flex items-center gap-2 text-gray-600">
+                        <MapPin className="h-4 w-4" />
+                        <span>{selectedInsight.country}</span>
+                      </div>
+                      {userData.trackedCountries.find(
+                        (c) => c.name === selectedInsight.country
+                      ) && (
+                        <div className="mt-3">
+                          <Button variant="outline" size="sm" className="gap-2">
+                            <Globe2 className="h-4 w-4" />
+                            View Country Details
+                          </Button>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Actions */}
+                  <div className="p-4 border border-gray-100 rounded-lg">
+                    <h3 className="font-medium text-gray-900 mb-3">
+                      Recommended Actions
+                    </h3>
+                    <div className="space-y-2">
+                      {selectedInsight.type === "recommendation" && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="gap-2 w-full justify-start"
+                        >
+                          <CheckCircle2 className="h-4 w-4" />
+                          Add to Action Plan
+                        </Button>
+                      )}
+                      {selectedInsight.type === "alert" && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="gap-2 w-full justify-start"
+                        >
+                          <Clock className="h-4 w-4" />
+                          Set Reminder
+                        </Button>
+                      )}
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="gap-2 w-full justify-start"
+                      >
+                        <MessageSquare className="h-4 w-4" />
+                        Discuss with AI Assistant
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+
+                <DialogFooter>
+                  <div className="flex items-center gap-2 text-sm text-gray-500">
+                    <Clock className="h-4 w-4" />
+                    Generated on{" "}
+                    {new Date(selectedInsight.date).toLocaleDateString(
+                      "en-US",
+                      {
+                        year: "numeric",
+                        month: "2-digit",
+                        day: "2-digit",
+                      }
+                    )}
+                  </div>
+                  <Button
+                    variant="default"
+                    onClick={() => setSelectedInsight(null)}
+                  >
+                    Close
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            )}
+          </Dialog>
 
           {/* Placeholder for Progress Tracker Section */}
           <div className="bg-white rounded-lg border border-gray-200 p-6">
