@@ -41,12 +41,28 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
+import { cn } from "@/lib/utils";
 
 // Add interfaces at the top of the file after imports
 interface Task {
   name: string;
   status: string;
   dueDate?: string;
+}
+
+// Add new interface for Progress Metrics
+interface ProgressMetric {
+  name: string;
+  value: number;
+  target: number;
+  category:
+    | "documents"
+    | "tasks"
+    | "language"
+    | "savings"
+    | "networking"
+    | "skills";
+  description: string;
 }
 
 interface City {
@@ -92,6 +108,11 @@ interface AIInsight {
   date: string;
   confidence: number;
   category: "visa" | "housing" | "job" | "culture" | "finance";
+  status?: "pending" | "implemented" | "dismissed";
+  accuracy?: number;
+  impact?: "high" | "medium" | "low";
+  tags?: string[];
+  relatedInsights?: string[];
 }
 
 // Update the userData type and data to match our interfaces
@@ -106,6 +127,50 @@ const userData = {
     aiChatsCompleted: 48,
     documentsPrepped: 8,
   },
+  progressMetrics: [
+    {
+      name: "Document Completion",
+      value: 8,
+      target: 12,
+      category: "documents",
+      description: "Required documents prepared for visa application",
+    },
+    {
+      name: "Task Progress",
+      value: 15,
+      target: 20,
+      category: "tasks",
+      description: "Key tasks completed across all tracked countries",
+    },
+    {
+      name: "Language Proficiency",
+      value: 60,
+      target: 100,
+      category: "language",
+      description: "Progress towards required language certifications",
+    },
+    {
+      name: "Savings Goal",
+      value: 70,
+      target: 100,
+      category: "savings",
+      description: "Progress towards relocation savings target",
+    },
+    {
+      name: "Network Building",
+      value: 40,
+      target: 100,
+      category: "networking",
+      description: "Professional connections in target countries",
+    },
+    {
+      name: "Skills Development",
+      value: 85,
+      target: 100,
+      category: "skills",
+      description: "Progress on required technical skills",
+    },
+  ] as ProgressMetric[],
   recentActivity: [
     "Earned 100 XPAT from AI chat insights",
     "Completed Japan visa checklist",
@@ -308,12 +373,60 @@ const getCategoryIcon = (category: AIInsight["category"]) => {
   }
 };
 
+// Add helper function for progress category icons
+const getProgressIcon = (category: ProgressMetric["category"]) => {
+  switch (category) {
+    case "documents":
+      return <FileText className="h-5 w-5" />;
+    case "tasks":
+      return <CheckCircle2 className="h-5 w-5" />;
+    case "language":
+      return <MessageSquare className="h-5 w-5" />;
+    case "savings":
+      return <Coins className="h-5 w-5" />;
+    case "networking":
+      return <Globe2 className="h-5 w-5" />;
+    case "skills":
+      return <Brain className="h-5 w-5" />;
+  }
+};
+
+// Add helper function for progress category colors
+const getProgressColor = (category: ProgressMetric["category"]) => {
+  switch (category) {
+    case "documents":
+      return "from-green-500 to-emerald-700";
+    case "tasks":
+      return "from-blue-500 to-indigo-700";
+    case "language":
+      return "from-purple-500 to-violet-700";
+    case "savings":
+      return "from-yellow-500 to-amber-700";
+    case "networking":
+      return "from-pink-500 to-rose-700";
+    case "skills":
+      return "from-sky-500 to-cyan-700";
+  }
+};
+
 export default function DashboardPage() {
   const [showRecentActivity, setShowRecentActivity] = useState(false);
   const [expandedCountry, setExpandedCountry] = useState<string | null>(null);
   const [selectedInsight, setSelectedInsight] = useState<AIInsight | null>(
     null
   );
+  const [insightFilter, setInsightFilter] = useState<{
+    type?: AIInsight["type"];
+    category?: AIInsight["category"];
+    status?: AIInsight["status"];
+    impact?: AIInsight["impact"];
+    minConfidence?: number;
+    dateRange?: { start: string; end: string };
+  }>({});
+  const [insightSort, setInsightSort] = useState<{
+    field: keyof AIInsight;
+    direction: "asc" | "desc";
+  }>({ field: "date", direction: "desc" });
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -740,125 +853,311 @@ export default function DashboardPage() {
           </div>
 
           {/* AI Insights Section */}
-          <div className="bg-white rounded-lg border border-gray-200 p-6 mb-8">
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
             <div className="flex items-center justify-between mb-6">
-              <div className="space-y-1">
+              <div>
                 <h2 className="text-xl font-bold text-gray-900">AI Insights</h2>
                 <p className="text-sm text-gray-500">
-                  Personalized recommendations and predictions based on your
-                  profile
+                  AI-powered recommendations and alerts
                 </p>
               </div>
-              <Button variant="outline" className="gap-2">
-                <Brain className="h-4 w-4" />
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  // TODO: Implement insight generation
+                }}
+                className="gap-2"
+              >
+                <Sparkles className="h-4 w-4" />
                 Generate New Insights
               </Button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {userData.aiInsights.map((insight, index) => (
-                <Card
-                  key={index}
-                  className={`border ${getInsightTypeStyle(
-                    insight.type
-                  )} group hover:shadow-md transition-all`}
+            {/* Filtering and Sorting Controls */}
+            <div className="mb-6 space-y-4">
+              <div className="flex items-center gap-4">
+                <select
+                  className="p-2 border rounded-md text-sm"
+                  value={insightFilter.type || ""}
+                  onChange={(e) =>
+                    setInsightFilter((prev) => ({
+                      ...prev,
+                      type: (e.target.value as AIInsight["type"]) || undefined,
+                    }))
+                  }
                 >
-                  <div className="p-4">
+                  <option value="">All Types</option>
+                  <option value="recommendation">Recommendations</option>
+                  <option value="alert">Alerts</option>
+                  <option value="prediction">Predictions</option>
+                  <option value="tip">Tips</option>
+                </select>
+
+                <select
+                  className="p-2 border rounded-md text-sm"
+                  value={insightFilter.category || ""}
+                  onChange={(e) =>
+                    setInsightFilter((prev) => ({
+                      ...prev,
+                      category:
+                        (e.target.value as AIInsight["category"]) || undefined,
+                    }))
+                  }
+                >
+                  <option value="">All Categories</option>
+                  <option value="visa">Visa</option>
+                  <option value="housing">Housing</option>
+                  <option value="job">Job</option>
+                  <option value="culture">Culture</option>
+                  <option value="finance">Finance</option>
+                </select>
+
+                <select
+                  className="p-2 border rounded-md text-sm"
+                  value={insightFilter.status || ""}
+                  onChange={(e) =>
+                    setInsightFilter((prev) => ({
+                      ...prev,
+                      status:
+                        (e.target.value as AIInsight["status"]) || undefined,
+                    }))
+                  }
+                >
+                  <option value="">All Statuses</option>
+                  <option value="pending">Pending</option>
+                  <option value="implemented">Implemented</option>
+                  <option value="dismissed">Dismissed</option>
+                </select>
+
+                <select
+                  className="p-2 border rounded-md text-sm"
+                  value={insightSort.field as string}
+                  onChange={(e) =>
+                    setInsightSort((prev) => ({
+                      ...prev,
+                      field: e.target.value as keyof AIInsight,
+                    }))
+                  }
+                >
+                  <option value="date">Date</option>
+                  <option value="confidence">Confidence</option>
+                  <option value="impact">Impact</option>
+                </select>
+
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() =>
+                    setInsightSort((prev) => ({
+                      ...prev,
+                      direction: prev.direction === "asc" ? "desc" : "asc",
+                    }))
+                  }
+                >
+                  {insightSort.direction === "asc" ? "↑" : "↓"}
+                </Button>
+              </div>
+
+              {/* Confidence Slider */}
+              <div className="flex items-center gap-4">
+                <span className="text-sm text-gray-500">Min. Confidence:</span>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={insightFilter.minConfidence || 0}
+                  onChange={(e) =>
+                    setInsightFilter((prev) => ({
+                      ...prev,
+                      minConfidence: parseInt(e.target.value),
+                    }))
+                  }
+                  className="w-48"
+                />
+                <span className="text-sm text-gray-500">
+                  {insightFilter.minConfidence || 0}%
+                </span>
+              </div>
+            </div>
+
+            {/* Insights Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {userData.aiInsights
+                .filter((insight) => {
+                  if (insightFilter.type && insight.type !== insightFilter.type)
+                    return false;
+                  if (
+                    insightFilter.category &&
+                    insight.category !== insightFilter.category
+                  )
+                    return false;
+                  if (
+                    insightFilter.status &&
+                    insight.status !== insightFilter.status
+                  )
+                    return false;
+                  if (
+                    insightFilter.minConfidence &&
+                    insight.confidence < insightFilter.minConfidence
+                  )
+                    return false;
+                  return true;
+                })
+                .sort((a, b) => {
+                  const direction = insightSort.direction === "asc" ? 1 : -1;
+                  if (typeof a[insightSort.field] === "string") {
+                    return (
+                      (a[insightSort.field] as string).localeCompare(
+                        b[insightSort.field] as string
+                      ) * direction
+                    );
+                  }
+                  return (
+                    ((a[insightSort.field] as number) -
+                      (b[insightSort.field] as number)) *
+                    direction
+                  );
+                })
+                .map((insight, index) => (
+                  <div
+                    key={index}
+                    className="relative bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+                  >
                     <div className="flex items-start justify-between mb-3">
-                      <div className="flex items-start gap-3">
-                        <div
-                          className={`p-2 rounded-lg ${getInsightTypeStyle(
-                            insight.type
-                          )}`}
-                        >
-                          {getCategoryIcon(insight.category)}
-                        </div>
-                        <div>
-                          <h3 className="font-medium text-gray-900 mb-1">
-                            {insight.title}
-                          </h3>
-                          {insight.country && (
-                            <div className="flex items-center gap-1 text-sm text-gray-500">
-                              <MapPin className="h-3 w-3" />
-                              <span>{insight.country}</span>
-                            </div>
-                          )}
-                        </div>
+                      <div
+                        className={cn(
+                          "px-2 py-1 rounded-full text-xs font-medium",
+                          getInsightTypeStyle(insight.type)
+                        )}
+                      >
+                        {insight.type.charAt(0).toUpperCase() +
+                          insight.type.slice(1)}
                       </div>
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger>
-                            <div className="px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
-                              {insight.confidence}% confidence
-                            </div>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>AI confidence score based on available data</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
+                      {insight.status && (
+                        <span
+                          className={cn(
+                            "px-2 py-1 rounded-full text-xs font-medium",
+                            {
+                              "bg-yellow-100 text-yellow-700":
+                                insight.status === "pending",
+                              "bg-green-100 text-green-700":
+                                insight.status === "implemented",
+                              "bg-gray-100 text-gray-700":
+                                insight.status === "dismissed",
+                            }
+                          )}
+                        >
+                          {insight.status.charAt(0).toUpperCase() +
+                            insight.status.slice(1)}
+                        </span>
+                      )}
                     </div>
 
-                    <p className="text-sm text-gray-600 mb-3">
+                    <h3
+                      className="text-lg font-semibold mb-2 cursor-pointer hover:text-sky-600"
+                      onClick={() => setSelectedInsight(insight)}
+                    >
+                      {insight.title}
+                    </h3>
+
+                    <p className="text-gray-600 text-sm mb-4">
                       {insight.description}
                     </p>
 
+                    <div className="flex items-center gap-4 mb-4">
+                      <div className="flex items-center gap-2">
+                        {getCategoryIcon(insight.category)}
+                        <span className="text-sm text-gray-500 capitalize">
+                          {insight.category}
+                        </span>
+                      </div>
+                      {insight.impact && (
+                        <div className="flex items-center gap-2">
+                          <TrendingUp className="h-4 w-4 text-gray-400" />
+                          <span className="text-sm text-gray-500 capitalize">
+                            {insight.impact} Impact
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
                     <div className="flex items-center justify-between">
-                      <span className="text-xs text-gray-500">
-                        Generated on{" "}
-                        {new Date(insight.date).toLocaleDateString("en-US", {
-                          year: "numeric",
-                          month: "2-digit",
-                          day: "2-digit",
-                        })}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger>
+                              <div className="flex items-center gap-1">
+                                <Progress
+                                  value={insight.confidence}
+                                  className="w-16"
+                                />
+                                <span className="text-sm text-gray-500">
+                                  {insight.confidence}%
+                                </span>
+                              </div>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>AI Confidence Score</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </div>
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="h-8"
                         onClick={() => setSelectedInsight(insight)}
                       >
-                        Learn More
+                        Learn More →
                       </Button>
                     </div>
                   </div>
-                </Card>
-              ))}
-            </div>
-
-            <div className="mt-4 pt-4 border-t border-gray-100">
-              <div className="flex items-center justify-between">
-                <p className="text-sm text-gray-500">
-                  Insights are updated daily based on your activity and
-                  preferences
-                </p>
-                <Button variant="link" className="text-sm">
-                  View All Insights →
-                </Button>
-              </div>
+                ))}
             </div>
           </div>
 
-          {/* AI Insight Detail Modal */}
+          {/* Insight Detail Dialog */}
           <Dialog
-            open={selectedInsight !== null}
+            open={!!selectedInsight}
             onOpenChange={() => setSelectedInsight(null)}
           >
             {selectedInsight && (
               <DialogContent className="max-w-2xl">
                 <DialogHeader>
-                  <div
-                    className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium mb-2 ${getInsightTypeStyle(
-                      selectedInsight.type
-                    )}`}
-                  >
-                    {getCategoryIcon(selectedInsight.category)}
-                    <span className="capitalize">{selectedInsight.type}</span>
+                  <div className="flex items-center gap-2 mb-2">
+                    <div
+                      className={cn(
+                        "px-2 py-1 rounded-full text-xs font-medium",
+                        getInsightTypeStyle(selectedInsight.type)
+                      )}
+                    >
+                      {selectedInsight.type.charAt(0).toUpperCase() +
+                        selectedInsight.type.slice(1)}
+                    </div>
+                    {selectedInsight.impact && (
+                      <div
+                        className={cn(
+                          "px-2 py-1 rounded-full text-xs font-medium",
+                          {
+                            "bg-red-100 text-red-700":
+                              selectedInsight.impact === "high",
+                            "bg-yellow-100 text-yellow-700":
+                              selectedInsight.impact === "medium",
+                            "bg-blue-100 text-blue-700":
+                              selectedInsight.impact === "low",
+                          }
+                        )}
+                      >
+                        {selectedInsight.impact.charAt(0).toUpperCase() +
+                          selectedInsight.impact.slice(1)}{" "}
+                        Impact
+                      </div>
+                    )}
                   </div>
                   <DialogTitle className="text-xl">
                     {selectedInsight.title}
                   </DialogTitle>
-                  <DialogDescription className="text-base text-gray-600">
+                  <DialogDescription>
                     {selectedInsight.description}
                   </DialogDescription>
                 </DialogHeader>
@@ -891,6 +1190,48 @@ export default function DashboardPage() {
                     </div>
                   </div>
 
+                  {/* Status Tracking */}
+                  <div className="p-4 border border-gray-100 rounded-lg">
+                    <h3 className="font-medium text-gray-900 mb-3">
+                      Status Tracking
+                    </h3>
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-4">
+                        <select
+                          className="p-2 border rounded-md text-sm"
+                          value={selectedInsight.status || "pending"}
+                          onChange={(e) => {
+                            // TODO: Implement status update
+                          }}
+                        >
+                          <option value="pending">Pending</option>
+                          <option value="implemented">Implemented</option>
+                          <option value="dismissed">Dismissed</option>
+                        </select>
+                        {selectedInsight.accuracy !== undefined && (
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm text-gray-500">
+                              Accuracy:
+                            </span>
+                            <span className="text-sm font-medium">
+                              {selectedInsight.accuracy}%
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {selectedInsight.tags?.map((tag, index) => (
+                          <span
+                            key={index}
+                            className="px-2 py-1 bg-gray-100 rounded-full text-xs text-gray-600"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
                   {/* Related Information */}
                   {selectedInsight.country && (
                     <div className="p-4 border border-gray-100 rounded-lg">
@@ -911,6 +1252,37 @@ export default function DashboardPage() {
                           </Button>
                         </div>
                       )}
+                    </div>
+                  )}
+
+                  {/* Related Insights */}
+                  {selectedInsight.relatedInsights && (
+                    <div className="p-4 border border-gray-100 rounded-lg">
+                      <h3 className="font-medium text-gray-900 mb-3">
+                        Related Insights
+                      </h3>
+                      <div className="space-y-2">
+                        {selectedInsight.relatedInsights.map(
+                          (insightId, index) => {
+                            const related = userData.aiInsights.find(
+                              (i) => i.title === insightId
+                            );
+                            if (!related) return null;
+                            return (
+                              <Button
+                                key={index}
+                                variant="ghost"
+                                size="sm"
+                                className="w-full justify-start gap-2"
+                                onClick={() => setSelectedInsight(related)}
+                              >
+                                {getCategoryIcon(related.category)}
+                                {related.title}
+                              </Button>
+                            );
+                          }
+                        )}
+                      </div>
                     </div>
                   )}
 
@@ -952,7 +1324,7 @@ export default function DashboardPage() {
                   </div>
                 </div>
 
-                <DialogFooter>
+                <DialogFooter className="flex items-center justify-between">
                   <div className="flex items-center gap-2 text-sm text-gray-500">
                     <Clock className="h-4 w-4" />
                     Generated on{" "}
@@ -976,12 +1348,91 @@ export default function DashboardPage() {
             )}
           </Dialog>
 
-          {/* Placeholder for Progress Tracker Section */}
+          {/* Progress Tracker Section */}
           <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">
-              Progress Tracker
-            </h2>
-            <p className="text-gray-600">Coming soon...</p>
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-xl font-bold text-gray-900">
+                  Progress Tracker
+                </h2>
+                <p className="text-sm text-gray-500">
+                  Track your global mobility milestones
+                </p>
+              </div>
+              <Button variant="outline" size="sm" className="gap-2">
+                <TrendingUp className="h-4 w-4" />
+                Set Goals
+              </Button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {userData.progressMetrics.map((metric, index) => (
+                <Card
+                  key={index}
+                  className="group hover:shadow-md transition-shadow"
+                >
+                  <div className="p-6">
+                    <div className="flex items-start justify-between mb-4">
+                      <div>
+                        <h3 className="font-semibold text-gray-900 mb-1">
+                          {metric.name}
+                        </h3>
+                        <p className="text-sm text-gray-500">
+                          {metric.description}
+                        </p>
+                      </div>
+                      <div
+                        className={`w-10 h-10 rounded-full bg-gradient-to-br ${getProgressColor(
+                          metric.category
+                        )} flex items-center justify-center text-white group-hover:scale-110 transition-transform`}
+                      >
+                        {getProgressIcon(metric.category)}
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-gray-600">Progress</span>
+                        <span className="font-medium">
+                          {Math.round((metric.value / metric.target) * 100)}%
+                        </span>
+                      </div>
+                      <Progress
+                        value={(metric.value / metric.target) * 100}
+                        className={`bg-${
+                          metric.category === "documents"
+                            ? "green"
+                            : metric.category === "tasks"
+                            ? "blue"
+                            : metric.category === "language"
+                            ? "purple"
+                            : metric.category === "savings"
+                            ? "yellow"
+                            : metric.category === "networking"
+                            ? "pink"
+                            : "sky"
+                        }-100`}
+                      />
+                      <div className="flex items-center justify-between text-xs text-gray-500">
+                        <span>{metric.value} completed</span>
+                        <span>Target: {metric.target}</span>
+                      </div>
+                    </div>
+
+                    <div className="mt-4 pt-4 border-t border-gray-100">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="w-full justify-between"
+                      >
+                        View Details
+                        <ArrowRight className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
           </div>
         </div>
       </main>
