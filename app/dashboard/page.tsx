@@ -107,7 +107,7 @@ interface AIInsight {
   country?: string;
   date: string;
   confidence: number;
-  category: "visa" | "housing" | "job" | "culture" | "finance";
+  category: "visa" | "housing" | "job" | "culture" | "finance" | "language";
   status?: "pending" | "implemented" | "dismissed";
   accuracy?: number;
   impact?: "high" | "medium" | "low";
@@ -427,6 +427,62 @@ export default function DashboardPage() {
     field: keyof AIInsight;
     direction: "asc" | "desc";
   }>({ field: "date", direction: "desc" });
+  const [showGoalsDialog, setShowGoalsDialog] = useState(false);
+  const [editingMetrics, setEditingMetrics] = useState<ProgressMetric[]>([]);
+  const [isGeneratingInsights, setIsGeneratingInsights] = useState(false);
+
+  const generateNewInsights = () => {
+    setIsGeneratingInsights(true);
+
+    // Analyze user data and generate new insights
+    const newInsights: AIInsight[] = [
+      {
+        type: "recommendation",
+        title: "Language Learning Opportunity",
+        description:
+          "Based on your interest in Japan, enrolling in a JLPT N2 preparation course now would align well with your timeline for the visa application in 2024.",
+        country: "Japan",
+        date: new Date().toISOString().split("T")[0],
+        confidence: 92,
+        category: "language",
+        status: "pending",
+        impact: "high",
+        tags: ["language", "visa", "preparation"],
+      },
+      {
+        type: "prediction",
+        title: "Skill Market Trend",
+        description:
+          "Your current skill set in technology aligns with a growing demand in Singapore's cybersecurity sector, with a projected 30% increase in job openings by Q3 2024.",
+        country: "Singapore",
+        date: new Date().toISOString().split("T")[0],
+        confidence: 85,
+        category: "job",
+        status: "pending",
+        impact: "medium",
+        tags: ["job market", "skills", "technology"],
+      },
+      {
+        type: "alert",
+        title: "Housing Deposit Requirement Update",
+        description:
+          "Recent changes in German rental laws have modified deposit requirements for foreign tenants. Your current savings meet the new criteria for major cities.",
+        country: "Germany",
+        date: new Date().toISOString().split("T")[0],
+        confidence: 88,
+        category: "housing",
+        status: "pending",
+        impact: "medium",
+        tags: ["housing", "finance", "regulations"],
+      },
+    ];
+
+    // Add new insights to the existing ones
+    setTimeout(() => {
+      userData.aiInsights = [...newInsights, ...userData.aiInsights];
+      setIsGeneratingInsights(false);
+    }, 1500);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -864,13 +920,21 @@ export default function DashboardPage() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => {
-                  // TODO: Implement insight generation
-                }}
+                onClick={generateNewInsights}
+                disabled={isGeneratingInsights}
                 className="gap-2"
               >
-                <Sparkles className="h-4 w-4" />
-                Generate New Insights
+                {isGeneratingInsights ? (
+                  <>
+                    <div className="animate-spin w-4 h-4 border-2 border-gray-300 border-t-blue-600 rounded-full" />
+                    Generating...
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="h-4 w-4" />
+                    Generate New Insights
+                  </>
+                )}
               </Button>
             </div>
 
@@ -1359,7 +1423,15 @@ export default function DashboardPage() {
                   Track your global mobility milestones
                 </p>
               </div>
-              <Button variant="outline" size="sm" className="gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="gap-2"
+                onClick={() => {
+                  setEditingMetrics([...userData.progressMetrics]);
+                  setShowGoalsDialog(true);
+                }}
+              >
                 <TrendingUp className="h-4 w-4" />
                 Set Goals
               </Button>
@@ -1434,6 +1506,111 @@ export default function DashboardPage() {
               ))}
             </div>
           </div>
+
+          {/* Goals Setting Dialog */}
+          <Dialog open={showGoalsDialog} onOpenChange={setShowGoalsDialog}>
+            <DialogContent className="max-w-2xl">
+              <DialogHeader>
+                <DialogTitle>Set Progress Goals</DialogTitle>
+                <DialogDescription>
+                  Adjust your targets for each progress metric. These goals will
+                  help track your global mobility journey.
+                </DialogDescription>
+              </DialogHeader>
+
+              <div className="space-y-4 my-4 max-h-[60vh] overflow-y-auto pr-4">
+                {editingMetrics.map((metric, index) => (
+                  <div
+                    key={index}
+                    className="p-4 border border-gray-100 rounded-lg space-y-3"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <div
+                          className={`w-8 h-8 rounded-full bg-gradient-to-br ${getProgressColor(
+                            metric.category
+                          )} flex items-center justify-center text-white`}
+                        >
+                          {getProgressIcon(metric.category)}
+                        </div>
+                        <div>
+                          <h4 className="font-medium text-gray-900">
+                            {metric.name}
+                          </h4>
+                          <p className="text-sm text-gray-500">
+                            {metric.description}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-gray-600">Current Progress</span>
+                        <span className="font-medium">
+                          {Math.round((metric.value / metric.target) * 100)}%
+                        </span>
+                      </div>
+                      <Progress value={(metric.value / metric.target) * 100} />
+                      <div className="flex items-center gap-4">
+                        <div className="flex-1">
+                          <label className="text-sm text-gray-500 mb-1 block">
+                            Target Value
+                          </label>
+                          <input
+                            type="number"
+                            min={metric.value}
+                            value={metric.target}
+                            onChange={(e) => {
+                              const newMetrics = [...editingMetrics];
+                              newMetrics[index] = {
+                                ...metric,
+                                target: Math.max(
+                                  metric.value,
+                                  parseInt(e.target.value) || metric.value
+                                ),
+                              };
+                              setEditingMetrics(newMetrics);
+                            }}
+                            className="w-full p-2 border rounded-md text-sm"
+                          />
+                        </div>
+                        <div className="flex-1">
+                          <label className="text-sm text-gray-500 mb-1 block">
+                            Current Value
+                          </label>
+                          <input
+                            type="number"
+                            value={metric.value}
+                            disabled
+                            className="w-full p-2 border rounded-md text-sm bg-gray-50"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <DialogFooter>
+                <Button
+                  variant="outline"
+                  onClick={() => setShowGoalsDialog(false)}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={() => {
+                    // Update the userData metrics with new targets
+                    userData.progressMetrics = [...editingMetrics];
+                    setShowGoalsDialog(false);
+                  }}
+                >
+                  Save Goals
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
       </main>
       <Footer />
