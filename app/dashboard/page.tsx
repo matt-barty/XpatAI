@@ -32,6 +32,8 @@ import {
   Check,
   RefreshCw,
   Map,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import BlobCursor from "@/components/Blob";
 import { useState } from "react";
@@ -175,7 +177,7 @@ const userData = {
     },
   ] as ProgressMetric[],
   recentActivity: [
-    "Earned 100 XPAT from AI chat insights",
+    "Earned 100 $XPAT from AI chat insights",
     "Completed Japan visa checklist",
     "Reached Level 3: Global Explorer",
   ],
@@ -470,6 +472,7 @@ export default function DashboardPage() {
   const [showGoalsDialog, setShowGoalsDialog] = useState(false);
   const [editingMetrics, setEditingMetrics] = useState<ProgressMetric[]>([]);
   const [isGeneratingInsights, setIsGeneratingInsights] = useState(false);
+  const [showBalance, setShowBalance] = useState(false);
 
   const generateNewInsights = () => {
     setIsGeneratingInsights(true);
@@ -559,11 +562,23 @@ export default function DashboardPage() {
               <div className="flex items-start justify-between mb-4">
                 <div>
                   <p className="text-sm font-medium text-white/80">
-                    XPAT Balance
+                    $XPAT Balance
                   </p>
-                  <h3 className="text-2xl font-bold">
-                    {userData.tokenBalance}
-                  </h3>
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-2xl font-bold">
+                      {showBalance ? userData.tokenBalance : "•••••"}
+                    </h3>
+                    <button
+                      onClick={() => setShowBalance(!showBalance)}
+                      className="text-white/80 hover:text-white transition-colors"
+                    >
+                      {showBalance ? (
+                        <Eye className="h-4 w-4" />
+                      ) : (
+                        <EyeOff className="h-4 w-4" />
+                      )}
+                    </button>
+                  </div>
                 </div>
                 <Sparkles className="h-5 w-5 text-white/90" />
               </div>
@@ -577,7 +592,7 @@ export default function DashboardPage() {
                       <TooltipTrigger>
                         <div className="flex items-center gap-1 text-white/80 text-sm">
                           <Gift className="h-4 w-4" />
-                          <span>{userData.nextReward} XPAT</span>
+                          <span>{userData.nextReward} $XPAT</span>
                         </div>
                       </TooltipTrigger>
                       <TooltipContent>
