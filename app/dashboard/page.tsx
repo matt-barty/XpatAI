@@ -29,6 +29,9 @@ import {
   AlertCircle,
   Brain,
   Coins,
+  Check,
+  RefreshCw,
+  Map,
 } from "lucide-react";
 import BlobCursor from "@/components/Blob";
 import { useState } from "react";
@@ -304,6 +307,43 @@ const userData = {
       category: "culture",
     },
   ] as AIInsight[],
+  aiCityRecommendations: [
+    {
+      name: "Valencia, Spain",
+      matchScore: 94,
+      highlight: "Tech Hub & Beach Life",
+      keyFactors: [
+        "Growing Tech Scene",
+        "300+ Days of Sun",
+        "35% Lower Cost vs. Tokyo",
+      ],
+      comparison:
+        "Similar innovation culture to Tokyo with Mediterranean lifestyle",
+    },
+    {
+      name: "Porto, Portugal",
+      matchScore: 89,
+      highlight: "Culture & Innovation",
+      keyFactors: [
+        "Strong Tech Community",
+        "Rich History",
+        "40% Lower Cost vs. Singapore",
+      ],
+      comparison: "Historic charm meets modern startup ecosystem",
+    },
+    {
+      name: "Tallinn, Estonia",
+      matchScore: 87,
+      highlight: "Digital Nomad Haven",
+      keyFactors: [
+        "E-Residency Program",
+        "English-Friendly",
+        "45% Lower Living Costs",
+      ],
+      comparison:
+        "Digital infrastructure rivals Singapore with European work-life balance",
+    },
+  ],
 };
 
 const getStatusColor = (status: string) => {
@@ -1611,6 +1651,63 @@ export default function DashboardPage() {
               </DialogFooter>
             </DialogContent>
           </Dialog>
+
+          {/* AI City Recommendations Section */}
+          <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-bold">AI-Powered City Matches</h2>
+                <button
+                  onClick={generateNewInsights}
+                  className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900"
+                >
+                  <RefreshCw className="h-4 w-4" />
+                  Refresh Recommendations
+                </button>
+              </div>
+              <p className="text-gray-600">
+                Cities that match your lifestyle preferences better than Tokyo
+                or Singapore
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-3 divide-x divide-gray-200">
+              {userData.aiCityRecommendations.map((city, index) => (
+                <div
+                  key={index}
+                  className="p-6 hover:bg-gray-50 transition-colors"
+                >
+                  <div className="flex justify-between items-start mb-4">
+                    <div>
+                      <h3 className="text-lg font-semibold">{city.name}</h3>
+                      <p className="text-sky-600 text-sm">{city.highlight}</p>
+                    </div>
+                    <div className="flex items-center gap-1 bg-gradient-to-r from-sky-500 to-blue-500 text-white px-2 py-1 rounded-full text-sm font-medium">
+                      {city.matchScore}% Match
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    {city.keyFactors.map((factor, i) => (
+                      <div key={i} className="flex items-start gap-2">
+                        <CheckCircle2 className="h-4 w-4 text-green-500 mt-1" />
+                        <span className="text-sm text-gray-600">{factor}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <p className="mt-4 text-sm text-gray-500 italic">
+                    {city.comparison}
+                  </p>
+
+                  <button className="mt-6 w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition-colors">
+                    <Map className="h-4 w-4" />
+                    Explore City
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </main>
       <Footer />
