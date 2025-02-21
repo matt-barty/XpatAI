@@ -20,6 +20,7 @@ const FloatingGlobe = ({ onInteraction }: { onInteraction?: () => void }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
   const [showButton, setShowButton] = useState(false);
+  const [isClicked, setIsClicked] = useState(false);
   const { playSound } = useSoundManager();
 
   useEffect(() => {
@@ -43,6 +44,7 @@ const FloatingGlobe = ({ onInteraction }: { onInteraction?: () => void }) => {
   }, []);
 
   const handleInteraction = () => {
+    setIsClicked(true);
     if (!hasInteracted) {
       playSound("intro");
       setHasInteracted(true);
@@ -87,33 +89,70 @@ const FloatingGlobe = ({ onInteraction }: { onInteraction?: () => void }) => {
       {showButton && !hasInteracted && (
         <motion.button
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={
+            isClicked
+              ? {
+                  opacity: 0,
+                  scale: [1, 1.5, 0],
+                  rotate: [0, 45, 90],
+                  y: [0, -50, -100],
+                }
+              : { opacity: 1, y: 0 }
+          }
+          transition={
+            isClicked
+              ? {
+                  duration: 1,
+                  ease: "easeOut",
+                }
+              : {
+                  duration: 0.6,
+                  ease: "easeOut",
+                }
+          }
           className="absolute bottom-0 transform translate-y-[200%] z-10"
           onClick={handleInteraction}
           onMouseEnter={() => playSound("hover")}
         >
           <motion.div
-            animate={{
-              boxShadow: [
-                "0 0 20px rgba(56, 189, 248, 0)",
-                "0 0 20px rgba(56, 189, 248, 0.3)",
-                "0 0 20px rgba(56, 189, 248, 0)",
-              ],
-            }}
+            animate={
+              isClicked
+                ? {
+                    boxShadow: [
+                      "0 0 20px rgba(56, 189, 248, 0.5)",
+                      "0 0 40px rgba(56, 189, 248, 0.8)",
+                      "0 0 60px rgba(56, 189, 248, 0)",
+                    ],
+                  }
+                : {
+                    boxShadow: [
+                      "0 0 20px rgba(56, 189, 248, 0)",
+                      "0 0 20px rgba(56, 189, 248, 0.3)",
+                      "0 0 20px rgba(56, 189, 248, 0)",
+                    ],
+                  }
+            }
             transition={{
-              duration: 2,
-              repeat: Infinity,
+              duration: isClicked ? 1 : 2,
+              repeat: isClicked ? 0 : Infinity,
               ease: "easeInOut",
             }}
             className="relative px-8 py-4 bg-black/30 backdrop-blur-sm rounded-full border border-white/10 group hover:bg-black/50 hover:border-white/20 transition-all duration-300"
           >
             <motion.span
-              animate={{
-                opacity: [0.5, 1, 0.5],
-              }}
+              animate={
+                isClicked
+                  ? {
+                      opacity: [1, 0],
+                      scale: [1, 1.2],
+                    }
+                  : {
+                      opacity: [0.5, 1, 0.5],
+                    }
+              }
               transition={{
-                duration: 2,
-                repeat: Infinity,
+                duration: isClicked ? 0.5 : 2,
+                repeat: isClicked ? 0 : Infinity,
                 ease: "easeInOut",
               }}
               className="text-white/70 font-light tracking-widest text-sm uppercase"
@@ -121,10 +160,19 @@ const FloatingGlobe = ({ onInteraction }: { onInteraction?: () => void }) => {
               Pierce the Veil
             </motion.span>
             <motion.div
-              animate={{ scale: [1, 1.2, 1] }}
+              animate={
+                isClicked
+                  ? {
+                      scale: [1, 2],
+                      opacity: [1, 0],
+                    }
+                  : {
+                      scale: [1, 1.2, 1],
+                    }
+              }
               transition={{
-                duration: 2,
-                repeat: Infinity,
+                duration: isClicked ? 0.5 : 2,
+                repeat: isClicked ? 0 : Infinity,
                 ease: "easeInOut",
               }}
               className="absolute -inset-[1px] border border-white/20 rounded-full"
