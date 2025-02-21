@@ -54,6 +54,29 @@ const GlowingOrb = ({ color, delay }: { color: string; delay: number }) => (
 );
 
 const ParticleEffect = () => {
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setDimensions({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
+    setIsClient(true);
+
+    const handleResize = () => {
+      setDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  if (!isClient) return null;
+
   const particles = Array.from({ length: 50 }).map((_, i) => ({
     size: Math.random() * 3,
     depth: Math.random(),
@@ -78,14 +101,14 @@ const ParticleEffect = () => {
           }}
           initial={{
             opacity: 0,
-            x: Math.random() * window.innerWidth,
-            y: Math.random() * window.innerHeight,
+            x: Math.random() * dimensions.width,
+            y: Math.random() * dimensions.height,
             scale: 0,
           }}
           animate={{
             opacity: [0, 1, 0],
-            x: Math.random() * window.innerWidth,
-            y: Math.random() * window.innerHeight,
+            x: Math.random() * dimensions.width,
+            y: Math.random() * dimensions.height,
             scale: [0, 2, 0],
           }}
           transition={{
