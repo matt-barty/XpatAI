@@ -262,14 +262,18 @@ export default function Home() {
 
   const handleGlobeInteraction = () => {
     console.log("Globe interaction triggered"); // Debug log
-    setShowTitle(true);
 
-    // Transition to main content after 6 seconds
+    // Show title after a short delay
+    setTimeout(() => {
+      setShowTitle(true);
+    }, 2000);
+
+    // Transition to main content after 15 seconds (matching intro sound length)
     setTimeout(() => {
       console.log("Transitioning to main content"); // Debug log
       playSound("transition");
       setShowIntro(false);
-    }, 6000);
+    }, 15000);
   };
 
   useEffect(() => {
