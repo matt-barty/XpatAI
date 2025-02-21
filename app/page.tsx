@@ -10,20 +10,21 @@ import Footer from "@/components/footer";
 import BlobCursor from "@/components/Blob";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Brain, Sparkles } from "lucide-react";
+import { Brain, Sparkles, Earth } from "lucide-react";
 import { Globe } from "@/components/magicui/globe";
 import Image from "next/image";
 import { useSoundManager } from "./components/SoundManager";
 
 const FloatingGlobe = ({ onInteraction }: { onInteraction?: () => void }) => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
+  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
   const { playSound } = useSoundManager();
 
   useEffect(() => {
-    // Show tooltip after 2 seconds
     const timer = setTimeout(() => {
       setShowTooltip(true);
     }, 2000);
@@ -32,9 +33,19 @@ const FloatingGlobe = ({ onInteraction }: { onInteraction?: () => void }) => {
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
+      // For globe movement
       setMousePosition({
         x: (e.clientX - window.innerWidth / 2) / 50,
         y: (e.clientY - window.innerHeight / 2) / 50,
+      });
+      // For tooltip and cursor position
+      setTooltipPosition({
+        x: e.clientX,
+        y: e.clientY,
+      });
+      setCursorPosition({
+        x: e.clientX,
+        y: e.clientY,
       });
     };
 
@@ -43,7 +54,7 @@ const FloatingGlobe = ({ onInteraction }: { onInteraction?: () => void }) => {
   }, []);
 
   const handleInteraction = () => {
-    console.log("Interaction handler called"); // Debug log
+    console.log("Interaction handler called");
     if (!hasInteracted) {
       playSound("intro");
       setHasInteracted(true);
@@ -57,16 +68,16 @@ const FloatingGlobe = ({ onInteraction }: { onInteraction?: () => void }) => {
     <div
       className="relative w-[800px] h-[800px]"
       onMouseEnter={() => {
-        console.log("Mouse enter"); // Debug log
+        console.log("Mouse enter");
         setIsHovered(true);
         handleInteraction();
       }}
       onMouseLeave={() => {
-        console.log("Mouse leave"); // Debug log
+        console.log("Mouse leave");
         setIsHovered(false);
       }}
       onClick={() => {
-        console.log("Click detected"); // Debug log
+        console.log("Click detected");
         handleInteraction();
       }}
     >
@@ -89,7 +100,7 @@ const FloatingGlobe = ({ onInteraction }: { onInteraction?: () => void }) => {
           x: { duration: 0.2, ease: "linear" },
           y: { duration: 0.2, ease: "linear" },
         }}
-        className="absolute inset-0 cursor-pointer"
+        className="absolute inset-0 cursor-none"
         style={{
           filter: isHovered ? "brightness(1.2) saturate(1.2)" : "none",
         }}
@@ -99,13 +110,27 @@ const FloatingGlobe = ({ onInteraction }: { onInteraction?: () => void }) => {
         </div>
       </motion.div>
 
+      {/* Custom Earth Cursor */}
+      {isHovered && (
+        <motion.div
+          className="fixed z-50 pointer-events-none"
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          style={{
+            left: cursorPosition.x - 12,
+            top: cursorPosition.y - 12,
+          }}
+        >
+          <Earth className="h-6 w-6 text-white" />
+        </motion.div>
+      )}
+
       {/* Tooltip */}
       {showTooltip && !hasInteracted && (
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0 }}
           animate={{
             opacity: [0.5, 1, 0.5],
-            y: [20, 0, 20],
             scale: [1, 1.05, 1],
           }}
           transition={{
@@ -113,7 +138,11 @@ const FloatingGlobe = ({ onInteraction }: { onInteraction?: () => void }) => {
             repeat: Infinity,
             ease: "easeInOut",
           }}
-          className="absolute left-1/2 bottom-0 transform -translate-x-1/2 translate-y-[120%] z-10"
+          className="fixed z-10 pointer-events-none"
+          style={{
+            left: `${tooltipPosition.x + 20}px`,
+            top: `${tooltipPosition.y + 20}px`,
+          }}
         >
           <div className="bg-white/10 backdrop-blur-sm px-6 py-3 rounded-full">
             <p className="text-white/80 text-sm whitespace-nowrap">
