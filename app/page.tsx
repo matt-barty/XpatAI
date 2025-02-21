@@ -210,125 +210,85 @@ export default function Home() {
 
             {/* Main Content */}
             <div className="relative h-full flex items-center justify-center">
-              <div className="text-center space-y-16 z-10">
-                {/* Logo Animation */}
+              <div className="text-center z-10">
+                {/* Title Animation */}
                 <motion.div
-                  initial={{ y: 50, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ duration: 1, ease: "easeOut" }}
-                  className="flex items-center justify-center gap-8"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 2, ease: "easeOut" }}
+                  className="relative"
                 >
                   <motion.div
-                    animate={{
-                      rotate: [0, 15, 0],
-                      scale: [1, 1.15, 1],
-                      y: [0, -10, 0],
-                    }}
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={{ opacity: 1, y: 0 }}
                     transition={{
-                      duration: 6,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}
-                    whileHover={{ scale: 1.2 }}
-                  >
-                    <Image
-                      src="/earth-logo.png"
-                      alt="Earth Logo"
-                      width={80}
-                      height={80}
-                      className="object-contain drop-shadow-[0_0_15px_rgba(56,189,248,0.3)]"
-                    />
-                  </motion.div>
-                  <motion.div
-                    animate={{
-                      rotate: [0, -15, 0],
-                      scale: [1, 1.15, 1],
-                      y: [0, 10, 0],
-                    }}
-                    transition={{
-                      duration: 6,
-                      repeat: Infinity,
-                      ease: "easeInOut",
+                      duration: 1.5,
                       delay: 0.5,
+                      ease: [0.19, 1, 0.22, 1],
                     }}
-                    whileHover={{ scale: 1.2 }}
+                    className="text-[8rem] md:text-[12rem] font-bold tracking-tighter font-cal"
                   >
-                    <Brain className="h-20 w-20 text-purple-500 drop-shadow-[0_0_15px_rgba(168,85,247,0.3)]" />
+                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-sky-500 via-white to-purple-500 [-webkit-text-stroke:1px_rgba(255,255,255,0.2)]">
+                      XpatAI
+                    </span>
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={{
+                      duration: 1.5,
+                      delay: 1,
+                      ease: [0.19, 1, 0.22, 1],
+                    }}
+                    className="h-[1px] w-[120%] -ml-[10%] bg-gradient-to-r from-transparent via-white/20 to-transparent absolute top-1/2 -translate-y-1/2"
+                  />
+
+                  <motion.div
+                    initial={{ opacity: 0, y: -40 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                      duration: 1.5,
+                      delay: 1.2,
+                      ease: [0.19, 1, 0.22, 1],
+                    }}
+                    className="mt-8 md:mt-12"
+                  >
+                    <span className="text-3xl md:text-4xl text-white/80 tracking-widest font-light uppercase">
+                      The Future of Global Mobility
+                    </span>
                   </motion.div>
                 </motion.div>
 
-                {/* Title Animation */}
-                <div className="space-y-8">
-                  <motion.h1
-                    initial={{ y: 50, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
-                    className="text-7xl md:text-9xl font-bold tracking-tight font-cal"
-                  >
-                    <motion.span
-                      initial={{ backgroundPosition: "200% 0" }}
-                      animate={{ backgroundPosition: "0% 0" }}
-                      transition={{ duration: 1.5, delay: 0.8 }}
-                      className="bg-clip-text text-transparent bg-[length:200%_auto] bg-gradient-to-r from-sky-500 via-white to-purple-500"
-                    >
-                      XpatAI
-                    </motion.span>
-                  </motion.h1>
-                  <motion.div
-                    initial={{ width: "0%" }}
-                    animate={{ width: "100%" }}
-                    transition={{
-                      duration: 1.2,
-                      delay: 1.2,
-                      ease: "easeInOut",
-                    }}
-                    className="h-[1px] bg-gradient-to-r from-sky-500 via-white to-purple-500 mx-auto max-w-[300px]"
-                  />
-                  <motion.p
-                    initial={{ y: 30, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ duration: 1, delay: 1.5, ease: "easeOut" }}
-                    className="text-3xl text-gray-400 tracking-wide font-inter font-light"
-                  >
-                    The Future of Global Mobility
-                  </motion.p>
-                </div>
-
-                {/* Features Animation */}
                 <motion.div
-                  initial={{ y: 30, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ duration: 1, delay: 2, ease: "easeOut" }}
-                  className="flex flex-col items-center gap-6"
+                  initial={{ opacity: 0, y: 40 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    duration: 1.5,
+                    delay: 2,
+                    ease: [0.19, 1, 0.22, 1],
+                  }}
+                  className="mt-16 md:mt-20 space-y-6"
                 >
                   <motion.div
-                    className="flex items-center gap-3 text-sky-400"
-                    whileHover={{ scale: 1.05 }}
-                    transition={{ duration: 0.2 }}
+                    animate={{ opacity: [0.6, 1, 0.6] }}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
+                    className="text-base md:text-lg tracking-wider text-sky-400/80 font-light"
                   >
-                    <motion.div
-                      animate={{
-                        scale: [1, 1.2, 1],
-                        rotate: [0, 180, 360],
-                      }}
-                      transition={{
-                        duration: 4,
-                        repeat: Infinity,
-                        ease: "linear",
-                      }}
-                    >
-                      <Sparkles className="h-8 w-8" />
-                    </motion.div>
-                    <span className="text-xl font-medium">
-                      AI-Powered Insights
-                    </span>
+                    AI-Powered Oracle Predicting Human Migration
                   </motion.div>
                   <motion.div
-                    initial={{ width: 0 }}
-                    animate={{ width: "300px" }}
-                    transition={{ duration: 1.5, delay: 1.5, ease: "easeOut" }}
-                    className="h-[2px] bg-gradient-to-r from-sky-500 via-white to-purple-500"
-                  />
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 2.5, duration: 1 }}
+                    className="text-sm tracking-widest text-white/40 uppercase"
+                  >
+                    Beta Access Opening Soon
+                  </motion.div>
                 </motion.div>
               </div>
             </div>
