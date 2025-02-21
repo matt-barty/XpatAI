@@ -40,7 +40,9 @@ export default function Footer() {
                 height={28}
                 className="h-7 w-7"
               />
-              XpatAI
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-sky-500 via-blue-400 to-indigo-600 font-cal tracking-tight">
+                XpatAI
+              </span>
             </Link>
             <p className="text-gray-600 max-w-xs">
               Your AI-powered companion for global relocation. Making

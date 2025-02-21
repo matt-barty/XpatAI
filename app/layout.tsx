@@ -5,9 +5,11 @@ import { LanguageProvider } from "./contexts/LanguageContext";
 import "./globals.css";
 import { ConversationProvider } from "./contexts/ConversationContext";
 import { Analytics } from "@vercel/analytics/next";
+import { calFont, inter } from "./fonts";
+
 export const metadata: Metadata = {
   title: "Xpat AI",
-  description: "Xpat AI - Your AI guide to moving abroad",
+  description: "Your AI-powered guide to global mobility",
 };
 
 export default function RootLayout({
@@ -16,8 +18,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body>
+    <html lang="en" className={`${calFont.variable} ${inter.variable}`}>
+      <body className="font-inter">
         <LanguageProvider>
           <UserProvider>
             <CountryDataProvider>

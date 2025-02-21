@@ -7,7 +7,7 @@ export default function Header() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-sm border-b border-gray-100">
       <div className="container mx-auto px-6 h-16 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-3 font-bold text-xl">
+        <Link href="/" className="flex items-center gap-3">
           <Image
             src="/earth-logo.png"
             alt="XpatAI Logo"
@@ -15,7 +15,9 @@ export default function Header() {
             height={28}
             className="h-7 w-7"
           />
-          XpatAI
+          <span className="font-bold text-xl bg-clip-text text-transparent bg-gradient-to-r from-sky-500 via-blue-400 to-indigo-600 font-cal tracking-tight">
+            XpatAI
+          </span>
         </Link>
 
         <nav className="hidden md:flex items-center space-x-10">
