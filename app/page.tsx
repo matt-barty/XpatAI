@@ -13,9 +13,22 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Brain, Sparkles } from "lucide-react";
 import { Globe } from "@/components/magicui/globe";
 import Image from "next/image";
+import { useSoundManager } from "./components/SoundManager";
 
-const FloatingGlobe = () => {
+const FloatingGlobe = ({ onInteraction }: { onInteraction?: () => void }) => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+  const [hasInteracted, setHasInteracted] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
+  const { playSound } = useSoundManager();
+
+  useEffect(() => {
+    // Show tooltip after 2 seconds
+    const timer = setTimeout(() => {
+      setShowTooltip(true);
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -29,26 +42,96 @@ const FloatingGlobe = () => {
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
+  const handleInteraction = () => {
+    console.log("Interaction handler called"); // Debug log
+    if (!hasInteracted) {
+      playSound("intro");
+      setHasInteracted(true);
+      onInteraction?.();
+    }
+    playSound("globe-hover");
+    setIsHovered(true);
+  };
+
   return (
-    <motion.div
-      initial={{ scale: 0.8, opacity: 0 }}
-      animate={{
-        scale: 1,
-        opacity: 1,
-        y: mousePosition.y + Math.sin(Date.now() / 1000) * 20,
-        x: mousePosition.x,
+    <div
+      className="relative w-[800px] h-[800px]"
+      onMouseEnter={() => {
+        console.log("Mouse enter"); // Debug log
+        setIsHovered(true);
+        handleInteraction();
       }}
-      transition={{
-        duration: 8,
-        repeat: Infinity,
-        ease: "easeInOut",
-        x: { duration: 0.2, ease: "linear" },
-        y: { duration: 0.2, ease: "linear" },
+      onMouseLeave={() => {
+        console.log("Mouse leave"); // Debug log
+        setIsHovered(false);
       }}
-      className="absolute w-[800px] h-[800px] opacity-30"
+      onClick={() => {
+        console.log("Click detected"); // Debug log
+        handleInteraction();
+      }}
     >
-      <Globe />
-    </motion.div>
+      <motion.div
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{
+          scale: isHovered ? 1.1 : 1,
+          opacity: isHovered ? 1 : 0.3,
+          y: mousePosition.y + Math.sin(Date.now() / 1000) * 20,
+          x: mousePosition.x,
+          rotateY: isHovered ? 180 : 0,
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          ease: "easeInOut",
+          scale: { duration: 0.4, ease: "easeOut" },
+          opacity: { duration: 0.4, ease: "easeOut" },
+          rotateY: { duration: 1.5, ease: "easeInOut" },
+          x: { duration: 0.2, ease: "linear" },
+          y: { duration: 0.2, ease: "linear" },
+        }}
+        className="absolute inset-0 cursor-pointer"
+        style={{
+          filter: isHovered ? "brightness(1.2) saturate(1.2)" : "none",
+        }}
+      >
+        <div className="w-full h-full pointer-events-none">
+          <Globe />
+        </div>
+      </motion.div>
+
+      {/* Tooltip */}
+      {showTooltip && !hasInteracted && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{
+            opacity: [0.5, 1, 0.5],
+            y: [20, 0, 20],
+            scale: [1, 1.05, 1],
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          className="absolute left-1/2 bottom-0 transform -translate-x-1/2 translate-y-[120%] z-10"
+        >
+          <div className="bg-white/10 backdrop-blur-sm px-6 py-3 rounded-full">
+            <p className="text-white/80 text-sm whitespace-nowrap">
+              Click the globe to begin your journey
+            </p>
+          </div>
+          <motion.div
+            animate={{ scale: [1, 1.5, 1] }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            className="absolute -inset-1 border border-white/20 rounded-full"
+          />
+        </motion.div>
+      )}
+    </div>
   );
 };
 
@@ -171,19 +254,26 @@ const ParticleEffect = () => {
 export default function Home() {
   const [showIntro, setShowIntro] = useState(true);
   const [showContent, setShowContent] = useState(false);
+  const [showTitle, setShowTitle] = useState(false);
   const globeRef = useRef(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const { playSound } = useSoundManager();
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
+  const handleGlobeInteraction = () => {
+    console.log("Globe interaction triggered"); // Debug log
+    setShowTitle(true);
+
+    // Transition to main content after 6 seconds
+    setTimeout(() => {
+      console.log("Transitioning to main content"); // Debug log
+      playSound("transition");
       setShowIntro(false);
-    }, 6000); // Extended duration for more impact
-
-    return () => clearTimeout(timer);
-  }, []);
+    }, 6000);
+  };
 
   useEffect(() => {
     if (!showIntro) {
+      console.log("Setting show content to true"); // Debug log
       setShowContent(true);
     }
   }, [showIntro]);
@@ -254,7 +344,7 @@ export default function Home() {
             {/* Background Effects */}
             <ParticleEffect />
             <div className="absolute inset-0 flex items-center justify-center">
-              <FloatingGlobe />
+              <FloatingGlobe onInteraction={handleGlobeInteraction} />
             </div>
             <div className="absolute inset-0 flex items-center justify-center">
               <GlowingOrb color="bg-sky-500" delay={0} depth={1.5} />
@@ -263,101 +353,69 @@ export default function Home() {
             </div>
 
             {/* Main Content */}
-            <motion.div
-              className="relative h-full flex items-center justify-center"
-              animate={{
-                x: mousePosition.x * -0.2,
-                y: mousePosition.y * -0.2,
-              }}
-              transition={{
-                type: "spring",
-                stiffness: 150,
-                damping: 15,
-                mass: 0.1,
-              }}
-            >
-              <div className="text-center z-10">
-                {/* Title Animation */}
+            <AnimatePresence>
+              {showTitle && (
                 <motion.div
+                  className="relative h-full flex items-center justify-center"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ duration: 2, ease: "easeOut" }}
-                  className="relative"
+                  transition={{ duration: 1 }}
                 >
                   <motion.div
-                    initial={{ opacity: 0, y: 40 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{
-                      duration: 1.5,
-                      delay: 0.5,
-                      ease: [0.19, 1, 0.22, 1],
-                    }}
-                    className="text-[8rem] md:text-[12rem] font-bold tracking-tighter font-cal"
+                    className="text-center z-10"
+                    onHoverStart={() => playSound("hover")}
                   >
-                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-sky-500 via-white to-purple-500 [-webkit-text-stroke:1px_rgba(255,255,255,0.2)]">
-                      XpatAI
-                    </span>
-                  </motion.div>
+                    {/* Title Animation */}
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 2, ease: "easeOut" }}
+                      className="relative"
+                    >
+                      <motion.div
+                        initial={{ opacity: 0, y: 40 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{
+                          duration: 1.5,
+                          ease: [0.19, 1, 0.22, 1],
+                        }}
+                        className="text-[8rem] md:text-[12rem] font-bold tracking-tighter font-cal"
+                      >
+                        <span className="bg-clip-text text-transparent bg-gradient-to-r from-sky-500 via-white to-purple-500 [-webkit-text-stroke:1px_rgba(255,255,255,0.2)]">
+                          XpatAI
+                        </span>
+                      </motion.div>
 
-                  <motion.div
-                    initial={{ scaleX: 0 }}
-                    animate={{ scaleX: 1 }}
-                    transition={{
-                      duration: 1.5,
-                      delay: 1,
-                      ease: [0.19, 1, 0.22, 1],
-                    }}
-                    className="h-[1px] w-[120%] -ml-[10%] bg-gradient-to-r from-transparent via-white/20 to-transparent absolute top-1/2 -translate-y-1/2"
-                  />
+                      <motion.div
+                        initial={{ scaleX: 0 }}
+                        animate={{ scaleX: 1 }}
+                        transition={{
+                          duration: 1.5,
+                          delay: 0.5,
+                          ease: [0.19, 1, 0.22, 1],
+                        }}
+                        className="h-[1px] w-[120%] -ml-[10%] bg-gradient-to-r from-transparent via-white/20 to-transparent absolute top-1/2 -translate-y-1/2"
+                      />
 
-                  <motion.div
-                    initial={{ opacity: 0, y: -40 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{
-                      duration: 1.5,
-                      delay: 1.2,
-                      ease: [0.19, 1, 0.22, 1],
-                    }}
-                    className="mt-8 md:mt-12"
-                  >
-                    <span className="text-3xl md:text-4xl text-white/80 tracking-widest font-light uppercase">
-                      The Future of Global Mobility
-                    </span>
+                      <motion.div
+                        initial={{ opacity: 0, y: -40 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{
+                          duration: 1.5,
+                          delay: 0.7,
+                          ease: [0.19, 1, 0.22, 1],
+                        }}
+                        className="mt-8 md:mt-12"
+                      >
+                        <span className="text-3xl md:text-4xl text-white/80 tracking-widest font-light uppercase">
+                          The Future of Global Mobility
+                        </span>
+                      </motion.div>
+                    </motion.div>
                   </motion.div>
                 </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 40 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    duration: 1.5,
-                    delay: 2,
-                    ease: [0.19, 1, 0.22, 1],
-                  }}
-                  className="mt-16 md:mt-20 space-y-6"
-                >
-                  <motion.div
-                    animate={{ opacity: [0.6, 1, 0.6] }}
-                    transition={{
-                      duration: 3,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}
-                    className="text-base md:text-lg tracking-wider text-sky-400/80 font-light"
-                  >
-                    AI-Powered Oracle Predicting Human Migration
-                  </motion.div>
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 2.5, duration: 1 }}
-                    className="text-sm tracking-widest text-white/40 uppercase"
-                  >
-                    Beta Access Opening Soon
-                  </motion.div>
-                </motion.div>
-              </div>
-            </motion.div>
+              )}
+            </AnimatePresence>
           </motion.div>
         )}
       </AnimatePresence>
