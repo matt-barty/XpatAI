@@ -10,42 +10,31 @@ import Footer from "@/components/footer";
 import BlobCursor from "@/components/Blob";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Brain, Sparkles, Earth } from "lucide-react";
+import { Brain, Sparkles } from "lucide-react";
 import { Globe } from "@/components/magicui/globe";
 import Image from "next/image";
 import { useSoundManager } from "./components/SoundManager";
 
 const FloatingGlobe = ({ onInteraction }: { onInteraction?: () => void }) => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
-  const [showTooltip, setShowTooltip] = useState(false);
-  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
+  const [showButton, setShowButton] = useState(false);
   const { playSound } = useSoundManager();
 
   useEffect(() => {
+    // Show button after 2 seconds
     const timer = setTimeout(() => {
-      setShowTooltip(true);
+      setShowButton(true);
     }, 2000);
     return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      // For globe movement
       setMousePosition({
         x: (e.clientX - window.innerWidth / 2) / 50,
         y: (e.clientY - window.innerHeight / 2) / 50,
-      });
-      // For tooltip and cursor position
-      setTooltipPosition({
-        x: e.clientX,
-        y: e.clientY,
-      });
-      setCursorPosition({
-        x: e.clientX,
-        y: e.clientY,
       });
     };
 
@@ -54,7 +43,6 @@ const FloatingGlobe = ({ onInteraction }: { onInteraction?: () => void }) => {
   }, []);
 
   const handleInteraction = () => {
-    console.log("Interaction handler called");
     if (!hasInteracted) {
       playSound("intro");
       setHasInteracted(true);
@@ -65,22 +53,7 @@ const FloatingGlobe = ({ onInteraction }: { onInteraction?: () => void }) => {
   };
 
   return (
-    <div
-      className="relative w-[800px] h-[800px]"
-      onMouseEnter={() => {
-        console.log("Mouse enter");
-        setIsHovered(true);
-        handleInteraction();
-      }}
-      onMouseLeave={() => {
-        console.log("Mouse leave");
-        setIsHovered(false);
-      }}
-      onClick={() => {
-        console.log("Click detected");
-        handleInteraction();
-      }}
-    >
+    <div className="relative w-[800px] h-[800px] flex flex-col items-center justify-center">
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{
@@ -100,7 +73,7 @@ const FloatingGlobe = ({ onInteraction }: { onInteraction?: () => void }) => {
           x: { duration: 0.2, ease: "linear" },
           y: { duration: 0.2, ease: "linear" },
         }}
-        className="absolute inset-0 cursor-none"
+        className="absolute inset-0 cursor-pointer"
         style={{
           filter: isHovered ? "brightness(1.2) saturate(1.2)" : "none",
         }}
@@ -110,55 +83,54 @@ const FloatingGlobe = ({ onInteraction }: { onInteraction?: () => void }) => {
         </div>
       </motion.div>
 
-      {/* Custom Earth Cursor */}
-      {isHovered && (
-        <motion.div
-          className="fixed z-50 pointer-events-none"
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          style={{
-            left: cursorPosition.x - 12,
-            top: cursorPosition.y - 12,
-          }}
+      {/* Mysterious Button */}
+      {showButton && !hasInteracted && (
+        <motion.button
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="absolute bottom-0 transform translate-y-[200%] z-10"
+          onClick={handleInteraction}
+          onMouseEnter={() => playSound("hover")}
         >
-          <Earth className="h-6 w-6 text-white" />
-        </motion.div>
-      )}
-
-      {/* Tooltip */}
-      {showTooltip && !hasInteracted && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{
-            opacity: [0.5, 1, 0.5],
-            scale: [1, 1.05, 1],
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="fixed z-10 pointer-events-none"
-          style={{
-            left: `${tooltipPosition.x + 20}px`,
-            top: `${tooltipPosition.y + 20}px`,
-          }}
-        >
-          <div className="bg-white/10 backdrop-blur-sm px-6 py-3 rounded-full">
-            <p className="text-white/80 text-sm whitespace-nowrap">
-              Click the globe to begin your journey
-            </p>
-          </div>
           <motion.div
-            animate={{ scale: [1, 1.5, 1] }}
+            animate={{
+              boxShadow: [
+                "0 0 20px rgba(56, 189, 248, 0)",
+                "0 0 20px rgba(56, 189, 248, 0.3)",
+                "0 0 20px rgba(56, 189, 248, 0)",
+              ],
+            }}
             transition={{
               duration: 2,
               repeat: Infinity,
               ease: "easeInOut",
             }}
-            className="absolute -inset-1 border border-white/20 rounded-full"
-          />
-        </motion.div>
+            className="relative px-8 py-4 bg-black/30 backdrop-blur-sm rounded-full border border-white/10 group hover:bg-black/50 hover:border-white/20 transition-all duration-300"
+          >
+            <motion.span
+              animate={{
+                opacity: [0.5, 1, 0.5],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              className="text-white/70 font-light tracking-widest text-sm uppercase"
+            >
+              Pierce the Veil
+            </motion.span>
+            <motion.div
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              className="absolute -inset-[1px] border border-white/20 rounded-full"
+            />
+          </motion.div>
+        </motion.button>
       )}
     </div>
   );
