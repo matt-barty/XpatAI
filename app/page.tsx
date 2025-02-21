@@ -157,7 +157,7 @@ const FloatingGlobe = ({ onInteraction }: { onInteraction?: () => void }) => {
               }}
               className="text-white/70 font-light tracking-widest text-sm uppercase"
             >
-              Pierce the Veil
+              Explore Beyond
             </motion.span>
             <motion.div
               animate={
