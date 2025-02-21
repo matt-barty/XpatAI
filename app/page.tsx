@@ -15,18 +15,35 @@ import { Globe } from "@/components/magicui/globe";
 import Image from "next/image";
 
 const FloatingGlobe = () => {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({
+        x: (e.clientX - window.innerWidth / 2) / 50,
+        y: (e.clientY - window.innerHeight / 2) / 50,
+      });
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
   return (
     <motion.div
       initial={{ scale: 0.8, opacity: 0 }}
       animate={{
         scale: 1,
         opacity: 1,
-        y: [0, -20, 0],
+        y: mousePosition.y + Math.sin(Date.now() / 1000) * 20,
+        x: mousePosition.x,
       }}
       transition={{
         duration: 8,
         repeat: Infinity,
         ease: "easeInOut",
+        x: { duration: 0.2, ease: "linear" },
+        y: { duration: 0.2, ease: "linear" },
       }}
       className="absolute w-[800px] h-[800px] opacity-30"
     >
@@ -35,23 +52,51 @@ const FloatingGlobe = () => {
   );
 };
 
-const GlowingOrb = ({ color, delay }: { color: string; delay: number }) => (
-  <motion.div
-    initial={{ scale: 0, opacity: 0 }}
-    animate={{
-      scale: [1, 1.3, 1],
-      opacity: [0.15, 0.4, 0.15],
-      rotate: [0, 180, 360],
-    }}
-    transition={{
-      duration: 8,
-      delay,
-      repeat: Infinity,
-      ease: "easeInOut",
-    }}
-    className={`absolute w-[400px] h-[400px] rounded-full blur-[100px] mix-blend-screen ${color}`}
-  />
-);
+const GlowingOrb = ({
+  color,
+  delay,
+  depth = 1,
+}: {
+  color: string;
+  delay: number;
+  depth?: number;
+}) => {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({
+        x: (e.clientX - window.innerWidth / 2) / (70 / depth),
+        y: (e.clientY - window.innerHeight / 2) / (70 / depth),
+      });
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [depth]);
+
+  return (
+    <motion.div
+      initial={{ scale: 0, opacity: 0 }}
+      animate={{
+        scale: [1, 1.3, 1],
+        opacity: [0.15, 0.4, 0.15],
+        rotate: [0, 180, 360],
+        x: mousePosition.x,
+        y: mousePosition.y,
+      }}
+      transition={{
+        duration: 8,
+        delay,
+        repeat: Infinity,
+        ease: "easeInOut",
+        x: { duration: 0.2, ease: "linear" },
+        y: { duration: 0.2, ease: "linear" },
+      }}
+      className={`absolute w-[400px] h-[400px] rounded-full blur-[100px] mix-blend-screen ${color}`}
+    />
+  );
+};
 
 const ParticleEffect = () => {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
@@ -127,6 +172,7 @@ export default function Home() {
   const [showIntro, setShowIntro] = useState(true);
   const [showContent, setShowContent] = useState(false);
   const globeRef = useRef(null);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -211,13 +257,25 @@ export default function Home() {
               <FloatingGlobe />
             </div>
             <div className="absolute inset-0 flex items-center justify-center">
-              <GlowingOrb color="bg-sky-500" delay={0} />
-              <GlowingOrb color="bg-purple-500" delay={1.5} />
-              <GlowingOrb color="bg-indigo-500" delay={3} />
+              <GlowingOrb color="bg-sky-500" delay={0} depth={1.5} />
+              <GlowingOrb color="bg-purple-500" delay={1.5} depth={2} />
+              <GlowingOrb color="bg-indigo-500" delay={3} depth={2.5} />
             </div>
 
             {/* Main Content */}
-            <div className="relative h-full flex items-center justify-center">
+            <motion.div
+              className="relative h-full flex items-center justify-center"
+              animate={{
+                x: mousePosition.x * -0.2,
+                y: mousePosition.y * -0.2,
+              }}
+              transition={{
+                type: "spring",
+                stiffness: 150,
+                damping: 15,
+                mass: 0.1,
+              }}
+            >
               <div className="text-center z-10">
                 {/* Title Animation */}
                 <motion.div
@@ -299,7 +357,7 @@ export default function Home() {
                   </motion.div>
                 </motion.div>
               </div>
-            </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
