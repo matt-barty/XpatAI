@@ -145,7 +145,15 @@ export default function Home() {
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: { opacity: 1 },
-    exit: { opacity: 0, transition: { duration: 0.5 } },
+    exit: {
+      opacity: 0,
+      scale: 1.1,
+      filter: "blur(10px)",
+      transition: {
+        duration: 1,
+        ease: [0.19, 1, 0.22, 1],
+      },
+    },
   };
 
   const logoVariants = {
@@ -297,9 +305,17 @@ export default function Home() {
       </AnimatePresence>
 
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: showContent ? 1 : 0 }}
-        transition={{ duration: 0.8 }}
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{
+          opacity: showContent ? 1 : 0,
+          scale: showContent ? 1 : 0.95,
+          filter: showContent ? "blur(0px)" : "blur(10px)",
+        }}
+        transition={{
+          duration: 1.2,
+          ease: [0.19, 1, 0.22, 1],
+          delay: 0.2,
+        }}
       >
         <BlobCursor fillColor="#0ea5e9" />
         <div
@@ -311,11 +327,27 @@ export default function Home() {
           }}
         />
         <Header />
-        <main>
+        <motion.main
+          initial={{ opacity: 0, y: 20 }}
+          animate={{
+            opacity: showContent ? 1 : 0,
+            y: showContent ? 0 : 20,
+          }}
+          transition={{
+            duration: 0.8,
+            delay: 0.4,
+            ease: [0.19, 1, 0.22, 1],
+          }}
+        >
           <Hero />
 
           {/* Video Demo Section */}
-          <section className="py-24 bg-gradient-to-b from-white to-gray-50">
+          <motion.section
+            initial={{ opacity: 0 }}
+            animate={{ opacity: showContent ? 1 : 0 }}
+            transition={{ delay: 0.6, duration: 0.8 }}
+            className="py-24 bg-gradient-to-b from-white to-gray-50"
+          >
             <div className="container mx-auto px-4">
               <div className="text-center mb-12">
                 <h2 className="text-3xl md:text-5xl font-bold mb-6">
@@ -341,14 +373,26 @@ export default function Home() {
                 </div>
               </div>
             </div>
-          </section>
+          </motion.section>
 
-          <Features />
-          <DarkFeatures />
-          <Stats />
-          <Newsletter />
-        </main>
-        <Footer />
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: showContent ? 1 : 0 }}
+            transition={{ delay: 0.8, duration: 0.8 }}
+          >
+            <Features />
+            <DarkFeatures />
+            <Stats />
+            <Newsletter />
+          </motion.div>
+        </motion.main>
+        <motion.footer
+          initial={{ opacity: 0 }}
+          animate={{ opacity: showContent ? 1 : 0 }}
+          transition={{ delay: 1, duration: 0.8 }}
+        >
+          <Footer />
+        </motion.footer>
       </motion.div>
     </div>
   );
