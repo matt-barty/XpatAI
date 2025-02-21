@@ -55,7 +55,7 @@ const FloatingGlobe = ({ onInteraction }: { onInteraction?: () => void }) => {
   };
 
   return (
-    <div className="relative w-[800px] h-[800px] flex flex-col items-center justify-center">
+    <div className="relative w-[90vw] md:w-[70vw] lg:w-[800px] h-[90vw] md:h-[70vw] lg:h-[800px] flex flex-col items-center justify-center">
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{
@@ -80,7 +80,7 @@ const FloatingGlobe = ({ onInteraction }: { onInteraction?: () => void }) => {
           filter: isHovered ? "brightness(1.2) saturate(1.2)" : "none",
         }}
       >
-        <div className="w-full h-full pointer-events-none">
+        <div className="w-full h-full pointer-events-none scale-[0.8] md:scale-[0.9] lg:scale-100">
           <Globe />
         </div>
       </motion.div>
@@ -110,7 +110,7 @@ const FloatingGlobe = ({ onInteraction }: { onInteraction?: () => void }) => {
                   ease: "easeOut",
                 }
           }
-          className="absolute bottom-0 transform translate-y-[200%] z-10"
+          className="absolute bottom-0 transform translate-y-[150%] sm:translate-y-[200%] z-10"
           onClick={handleInteraction}
           onMouseEnter={() => playSound("hover")}
         >
@@ -137,7 +137,7 @@ const FloatingGlobe = ({ onInteraction }: { onInteraction?: () => void }) => {
               repeat: isClicked ? 0 : Infinity,
               ease: "easeInOut",
             }}
-            className="relative px-8 py-4 bg-black/30 backdrop-blur-sm rounded-full border border-white/10 group hover:bg-black/50 hover:border-white/20 transition-all duration-300"
+            className="relative px-4 sm:px-8 py-3 sm:py-4 bg-black/30 backdrop-blur-sm rounded-full border border-white/10 group hover:bg-black/50 hover:border-white/20 transition-all duration-300"
           >
             <motion.span
               animate={
@@ -155,7 +155,7 @@ const FloatingGlobe = ({ onInteraction }: { onInteraction?: () => void }) => {
                 repeat: isClicked ? 0 : Infinity,
                 ease: "easeInOut",
               }}
-              className="text-white/70 font-light tracking-widest text-sm uppercase"
+              className="text-white/70 font-light tracking-widest text-xs sm:text-sm uppercase"
             >
               Explore Beyond
             </motion.span>
@@ -432,7 +432,7 @@ export default function Home() {
                           duration: 1.5,
                           ease: [0.19, 1, 0.22, 1],
                         }}
-                        className="text-[8rem] md:text-[12rem] font-bold tracking-tighter font-cal"
+                        className="text-[4rem] sm:text-[6rem] md:text-[8rem] lg:text-[12rem] font-bold tracking-tighter font-cal"
                       >
                         <span className="bg-clip-text text-transparent bg-gradient-to-r from-sky-500 via-white to-purple-500 [-webkit-text-stroke:1px_rgba(255,255,255,0.2)]">
                           XpatAI
@@ -458,9 +458,9 @@ export default function Home() {
                           delay: 0.7,
                           ease: [0.19, 1, 0.22, 1],
                         }}
-                        className="mt-8 md:mt-12"
+                        className="mt-4 sm:mt-6 md:mt-8 lg:mt-12"
                       >
-                        <span className="text-3xl md:text-4xl text-white/80 tracking-widest font-light uppercase">
+                        <span className="text-xl sm:text-2xl md:text-3xl lg:text-4xl text-white/80 tracking-widest font-light uppercase">
                           The Future of Global Mobility
                         </span>
                       </motion.div>
